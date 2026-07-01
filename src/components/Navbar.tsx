@@ -3,11 +3,17 @@ import { Wallet, Zap, Loader2 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from './Logo';
 import { useWallet } from '../context/WalletContext';
+import { useGame } from '../context/GameContext';
+
+const formatXP = (xp: number): string => {
+  return xp >= 1000 ? Math.floor(xp / 1000) + 'K' : xp.toString();
+};
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { isConnected, isConnecting, walletAddress, connectWallet } = useWallet();
+  const { gameState } = useGame();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,7 +75,7 @@ const Navbar: React.FC = () => {
               {/* XP Badge */}
               <div className="flex items-center gap-1.5 px-3 py-1.5 bg-secondary-layer rounded-full">
                 <Zap size={16} className="text-gold" />
-                <span className="text-sm font-semibold text-gold">1,250 XP</span>
+                <span className="text-sm font-semibold text-gold">{formatXP(gameState.totalXP)} XP</span>
               </div>
 
               {/* Wallet Address */}

@@ -71,13 +71,13 @@ function AppRoutes() {
 function App() {
   return (
     <ToastProvider>
-      <WalletProvider>
-        <GameProvider>
+      <GameProvider>
+        <WalletProvider>
           <BrowserRouter>
             <AppRoutes />
           </BrowserRouter>
-        </GameProvider>
-      </WalletProvider>
+        </WalletProvider>
+      </GameProvider>
     </ToastProvider>
   );
 }

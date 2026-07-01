@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useToast } from './ToastContext';
+import { useGame } from './GameContext';
 
 declare global {
   interface Window {
@@ -44,6 +45,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const [walletAddress, setWalletAddress] = useState('');
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(false);
   const { showToast } = useToast();
+  const { loadStateForWallet, unlockAchievement, resetGame } = useGame();
 
   const connectWallet = async () => {
     if (!window.ethereum) {
@@ -60,6 +62,8 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       setWalletAddress(address);
       setIsConnected(true);
       localStorage.setItem('nexora_wallet', address.toLowerCase());
+      loadStateForWallet(address);
+      unlockAchievement('first_login');
       const chainId = await window.ethereum.request({ method: 'eth_chainId' });
       setIsCorrectNetwork(chainId === RITUAL_CHAIN_ID);
     } catch (err: any) {
@@ -78,6 +82,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     setWalletAddress('');
     setIsCorrectNetwork(false);
     localStorage.removeItem('nexora_wallet');
+    resetGame();
   };
 
   const switchToRitual = async () => {
