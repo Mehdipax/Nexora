@@ -1,11 +1,28 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useToast } from './ToastContext';
 import { useGame } from './GameContext';
+import type { GameState, RankType } from './GameContext';
+import {
+  ensureUser,
+  loadAchievementsDB,
+  loadTransactionsDB,
+  loadUserFromDB,
+} from '../lib/database';
 
 declare global {
   interface Window {
-    ethereum?: any;
+    ethereum?: EthereumProvider;
   }
+}
+
+interface EthereumProvider {
+  request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
+  on: (event: string, handler: (...args: unknown[]) => void) => void;
+  removeListener: (event: string, handler: (...args: unknown[]) => void) => void;
+}
+
+interface WalletError {
+  code?: number;
 }
 
 const RITUAL_CHAIN_ID = '0x7BB';
@@ -45,7 +62,48 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const [walletAddress, setWalletAddress] = useState('');
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(false);
   const { showToast } = useToast();
-  const { loadStateForWallet, unlockAchievement, resetGame } = useGame();
+  const {
+    loadFromDBState,
+    loadStateForWallet,
+    resetGame,
+    unlockAchievement,
+  } = useGame();
+
+  const loadSupabaseState = async (address: string) => {
+    try {
+      await ensureUser(address);
+      const [dbUser, dbAchievements, dbTransactions] = await Promise.all([
+        loadUserFromDB(address),
+        loadAchievementsDB(address),
+        loadTransactionsDB(address),
+      ]);
+
+      if (dbUser) {
+        const merged: Partial<GameState> = {
+          totalXP: dbUser.total_xp,
+          level: dbUser.level,
+          rank: dbUser.rank as RankType,
+          rankScore: dbUser.rank_score,
+          streak: dbUser.streak,
+          lastActiveDate: dbUser.last_active_date,
+          correctAnswers: dbUser.correct_answers,
+          totalChallenges: dbUser.total_challenges,
+          premiumStatus: dbUser.premium_status,
+          premiumPurchasedAt: dbUser.premium_purchased_at,
+          xpBoosterActive: dbUser.xp_booster_active,
+          xpBoosterExpiry: dbUser.xp_booster_expiry
+            ? new Date(dbUser.xp_booster_expiry).getTime()
+            : null,
+          achievements: dbAchievements,
+          transactions: dbTransactions,
+        };
+        loadStateForWallet(address);
+        loadFromDBState(merged);
+      }
+    } catch {
+      console.warn('[DB] Supabase unavailable, using local data');
+    }
+  };
 
   const connectWallet = async () => {
     if (!window.ethereum) {
@@ -54,9 +112,9 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     }
     try {
       setIsConnecting(true);
-      const accounts = await window.ethereum.request({
+      const accounts = (await window.ethereum.request({
         method: 'eth_requestAccounts',
-      });
+      })) as string[];
       if (!accounts || accounts.length === 0) return;
       const address = accounts[0];
       setWalletAddress(address);
@@ -64,10 +122,11 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       localStorage.setItem('nexora_wallet', address.toLowerCase());
       loadStateForWallet(address);
       unlockAchievement('first_login');
-      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      await loadSupabaseState(address);
+      const chainId = (await window.ethereum.request({ method: 'eth_chainId' })) as string;
       setIsCorrectNetwork(chainId === RITUAL_CHAIN_ID);
-    } catch (err: any) {
-      if (err.code === 4001) {
+    } catch (err: unknown) {
+      if ((err as WalletError).code === 4001) {
         showToast('error', 'Connection rejected by user.');
       } else {
         showToast('error', 'Failed to connect. Please try again.');
@@ -96,8 +155,8 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         params: [{ chainId: RITUAL_CHAIN_ID }],
       });
       setIsCorrectNetwork(true);
-    } catch (err: any) {
-      if (err.code === 4902) {
+    } catch (err: unknown) {
+      if ((err as WalletError).code === 4902) {
         try {
           await window.ethereum.request({
             method: 'wallet_addEthereumChain',
@@ -107,7 +166,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         } catch {
           showToast('error', 'Failed to add Ritual network.');
         }
-      } else if (err.code !== 4001) {
+      } else if ((err as WalletError).code !== 4001) {
         showToast('error', 'Failed to switch network.');
       }
     }
@@ -115,12 +174,13 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
   const purchaseItem = async (
     price: string,
-    _itemType: 'xp_booster' | 'premium_pass'
+    itemType: 'xp_booster' | 'premium_pass'
   ): Promise<string> => {
+    void itemType;
     if (!window.ethereum) {
       throw new Error('NO_WALLET');
     }
-    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+    const chainId = (await window.ethereum.request({ method: 'eth_chainId' })) as string;
     if (chainId !== RITUAL_CHAIN_ID) {
       throw new Error('WRONG_NETWORK');
     }
@@ -140,46 +200,53 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
   useEffect(() => {
     if (!window.ethereum) return;
+    const ethereum = window.ethereum;
 
     const savedWallet = localStorage.getItem('nexora_wallet');
     if (savedWallet) {
-      window.ethereum
+      ethereum
         .request({ method: 'eth_accounts' })
-        .then((accounts: string[]) => {
+        .then((accounts) => {
+          const typedAccounts = accounts as string[];
           if (
-            accounts.length > 0 &&
-            accounts[0].toLowerCase() === savedWallet.toLowerCase()
+            typedAccounts.length > 0 &&
+            typedAccounts[0].toLowerCase() === savedWallet.toLowerCase()
           ) {
-            setWalletAddress(accounts[0]);
+            setWalletAddress(typedAccounts[0]);
             setIsConnected(true);
-            window.ethereum
+            loadStateForWallet(typedAccounts[0]);
+            loadSupabaseState(typedAccounts[0]);
+            ethereum
               .request({ method: 'eth_chainId' })
-              .then((chainId: string) => {
-                setIsCorrectNetwork(chainId === RITUAL_CHAIN_ID);
+              .then((chainId) => {
+                setIsCorrectNetwork((chainId as string) === RITUAL_CHAIN_ID);
               });
           }
         });
     }
 
-    const handleAccountsChanged = (accounts: string[]) => {
-      if (accounts.length === 0) {
+    const handleAccountsChanged = (accounts: unknown) => {
+      const typedAccounts = accounts as string[];
+      if (typedAccounts.length === 0) {
         disconnectWallet();
       } else {
-        setWalletAddress(accounts[0]);
-        localStorage.setItem('nexora_wallet', accounts[0].toLowerCase());
+        setWalletAddress(typedAccounts[0]);
+        localStorage.setItem('nexora_wallet', typedAccounts[0].toLowerCase());
+        loadStateForWallet(typedAccounts[0]);
+        loadSupabaseState(typedAccounts[0]);
       }
     };
 
-    const handleChainChanged = (chainId: string) => {
-      setIsCorrectNetwork(chainId === RITUAL_CHAIN_ID);
+    const handleChainChanged = (chainId: unknown) => {
+      setIsCorrectNetwork((chainId as string) === RITUAL_CHAIN_ID);
     };
 
-    window.ethereum.on('accountsChanged', handleAccountsChanged);
-    window.ethereum.on('chainChanged', handleChainChanged);
+    ethereum.on('accountsChanged', handleAccountsChanged);
+    ethereum.on('chainChanged', handleChainChanged);
 
     return () => {
-      window.ethereum?.removeListener('accountsChanged', handleAccountsChanged);
-      window.ethereum?.removeListener('chainChanged', handleChainChanged);
+      ethereum.removeListener('accountsChanged', handleAccountsChanged);
+      ethereum.removeListener('chainChanged', handleChainChanged);
     };
   }, []);
 
