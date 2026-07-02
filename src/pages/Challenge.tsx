@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Star, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { BrainIcon, FootballIcon, CircuitIcon } from '../components/CategoryIcons';
 import Logo from '../components/Logo';
+import { generateQuestion, QuestionData } from '../lib/gemini';
+import { useGame } from '../context/GameContext';
 
 type ChallengeState = 'category' | 'difficulty' | 'loading' | 'question' | 'correct' | 'wrong';
 
@@ -87,18 +89,6 @@ const difficulties: Difficulty[] = [
   },
 ];
 
-const mockQuestion = {
-  text: 'What is the primary technology behind Bitcoin?',
-  options: [
-    'A. Centralized Database',
-    'B. Blockchain',
-    'C. Cloud Computing',
-    'D. Artificial Intelligence',
-  ],
-  correctIndex: 1,
-  explanation: 'Bitcoin uses blockchain technology, a decentralized ledger that records all transactions across a network of computers.',
-};
-
 const Challenge: React.FC = () => {
   const [state, setState] = useState<ChallengeState>('category');
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -106,26 +96,20 @@ const Challenge: React.FC = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState(30);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState<QuestionData | null>(null);
+  const [aiError, setAiError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (state === 'loading') {
-      const timer = setTimeout(() => {
-        setState('question');
-        setTimeLeft(30);
-      }, 2500);
-      return () => clearTimeout(timer);
-    }
-  }, [state]);
+  const { awardXP, addChallenge, checkStreak } = useGame();
 
+  // Timer — setTimeout chain avoids setInterval memory leak
   useEffect(() => {
-    if (state === 'question' && timeLeft > 0) {
-      const timer = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
-      }, 1000);
-      return () => clearInterval(timer);
-    } else if (state === 'question' && timeLeft === 0) {
+    if (state !== 'question') return;
+    if (timeLeft <= 0) {
       handleSubmit();
+      return;
     }
+    const t = setTimeout(() => setTimeLeft(p => p - 1), 1000);
+    return () => clearTimeout(t);
   }, [state, timeLeft]);
 
   const handleCategorySelect = (category: Category) => {
@@ -133,8 +117,7 @@ const Challenge: React.FC = () => {
     setState('difficulty');
   };
 
-  const handleDifficultySelect = (difficulty: Difficulty) => {
-    // Adjust XP based on category
+  const handleDifficultySelect = async (difficulty: Difficulty) => {
     let adjustedXP = difficulty.xp;
     if (selectedCategory?.id === 'ai') {
       if (difficulty.id === 'easy') adjustedXP = 15;
@@ -143,24 +126,61 @@ const Challenge: React.FC = () => {
     }
     setSelectedDifficulty({ ...difficulty, xp: adjustedXP });
     setState('loading');
+    setAiError(null);
+    setSelectedAnswer(null);
+    setCurrentQuestion(null);
+
+    try {
+      const q = await generateQuestion(
+        selectedCategory!.id as 'general' | 'football' | 'ai',
+        difficulty.id as 'easy' | 'medium' | 'hard'
+      );
+      setCurrentQuestion(q);
+      setTimeLeft(30);
+      setState('question');
+    } catch (err: any) {
+      setAiError(err.message || 'Failed to generate question.');
+      setState('difficulty');
+    }
   };
 
   const handleSubmit = () => {
+    if (!currentQuestion || !selectedCategory || !selectedDifficulty) return;
     setIsSubmitting(true);
+
+    const answerKey = selectedAnswer !== null
+      ? String.fromCharCode(65 + selectedAnswer) as 'A' | 'B' | 'C' | 'D'
+      : null;
+    const isCorrect = answerKey !== null && answerKey === currentQuestion.correct;
+
+    const xpEarned = awardXP(
+      selectedCategory.id as any,
+      selectedDifficulty.id as any,
+      isCorrect
+    );
+
+    addChallenge({
+      id: Date.now().toString(),
+      category: selectedCategory.id as any,
+      difficulty: selectedDifficulty.id as any,
+      isCorrect,
+      xpEarned,
+      timestamp: new Date().toISOString(),
+    });
+
+    if (isCorrect) checkStreak();
+
     setTimeout(() => {
-      if (selectedAnswer === mockQuestion.correctIndex) {
-        setState('correct');
-      } else {
-        setState('wrong');
-      }
+      setState(isCorrect ? 'correct' : 'wrong');
       setIsSubmitting(false);
-    }, 500);
+    }, 400);
   };
 
   const handleBack = () => {
     if (state === 'difficulty') {
       setState('category');
       setSelectedCategory(null);
+      setAiError(null);
     } else if (state === 'question' || state === 'loading') {
       setState('difficulty');
       setSelectedAnswer(null);
@@ -169,9 +189,9 @@ const Challenge: React.FC = () => {
   };
 
   const handleNextChallenge = () => {
-    setState('loading');
-    setSelectedAnswer(null);
-    setTimeLeft(30);
+    if (selectedDifficulty) {
+      handleDifficultySelect(selectedDifficulty);
+    }
   };
 
   const handleGoToDashboard = () => {
@@ -179,6 +199,8 @@ const Challenge: React.FC = () => {
     setSelectedCategory(null);
     setSelectedDifficulty(null);
     setSelectedAnswer(null);
+    setCurrentQuestion(null);
+    setAiError(null);
   };
 
   // STATE 1: Category Selection
@@ -248,7 +270,16 @@ const Challenge: React.FC = () => {
         <h2 className="text-2xl lg:text-3xl font-bold text-text-primary mb-2">
           {selectedCategory?.name}
         </h2>
-        <p className="text-text-secondary mb-10">Select your difficulty level</p>
+        <p className="text-text-secondary mb-6">Select your difficulty level</p>
+
+        {aiError && (
+          <div
+            className="mb-6 p-4 rounded-xl text-sm text-red-400"
+            style={{ backgroundColor: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}
+          >
+            {aiError}
+          </div>
+        )}
 
         <div className="space-y-4">
           {difficulties.map((difficulty) => {
@@ -304,6 +335,17 @@ const Challenge: React.FC = () => {
         <div className="h-2 w-48 bg-secondary-layer rounded-full overflow-hidden mx-auto">
           <div className="h-full bg-gradient-brand rounded-full animate-pulse" style={{ width: '60%' }} />
         </div>
+        {aiError && (
+          <div className="mt-6 text-center">
+            <p className="text-red-400 text-sm mb-3">{aiError}</p>
+            <button
+              onClick={() => selectedDifficulty && handleDifficultySelect(selectedDifficulty)}
+              className="px-4 py-2 bg-brand-purple text-white rounded-xl text-sm font-medium"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -313,6 +355,7 @@ const Challenge: React.FC = () => {
     const progress = (timeLeft / 30) * 100;
     const circumference = 2 * Math.PI * 45;
     const strokeDashoffset = circumference - (progress / 100) * circumference;
+    const optionKeys = ['A', 'B', 'C', 'D'] as const;
 
     return (
       <div className="min-h-screen bg-bg-primary pt-20 pb-8 px-4">
@@ -380,14 +423,14 @@ const Challenge: React.FC = () => {
 
             {/* Question Text */}
             <h3 className="text-lg lg:text-xl font-semibold text-text-primary text-center mb-8 leading-relaxed">
-              {mockQuestion.text}
+              {currentQuestion?.question ?? 'Loading...'}
             </h3>
 
             {/* Answer Options */}
             <div className="space-y-3">
-              {mockQuestion.options.map((option, index) => (
+              {optionKeys.map((key, index) => (
                 <button
-                  key={index}
+                  key={key}
                   onClick={() => setSelectedAnswer(index)}
                   className={`w-full p-4 rounded-xl text-left transition-all duration-200 flex items-center gap-4 ${
                     selectedAnswer === index
@@ -396,15 +439,15 @@ const Challenge: React.FC = () => {
                   }`}
                 >
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                    className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${
                       selectedAnswer === index
                         ? 'bg-interactive-cyan text-bg-primary'
                         : 'bg-card text-text-secondary'
                     }`}
                   >
-                    {String.fromCharCode(65 + index)}
+                    {key}
                   </div>
-                  <span className="text-text-primary">{option.slice(3)}</span>
+                  <span className="text-text-primary">{currentQuestion?.options[key]}</span>
                 </button>
               ))}
             </div>
@@ -432,7 +475,6 @@ const Challenge: React.FC = () => {
     <div className="min-h-screen bg-bg-primary pt-20 pb-8 px-4 flex items-center justify-center">
       <div className="max-w-[680px] w-full">
         <div className="bg-card rounded-2xl p-8 lg:p-10 text-center">
-          {/* Checkmark Animation */}
           <div className="mb-6 animate-bounce">
             <CheckCircle size={80} className="text-success-emerald mx-auto" />
           </div>
@@ -449,12 +491,12 @@ const Challenge: React.FC = () => {
           <div className="bg-success-emerald/10 rounded-xl p-4 mb-3">
             <div className="text-sm text-text-secondary mb-1">Correct Answer:</div>
             <div className="text-text-primary font-medium">
-              {mockQuestion.options[mockQuestion.correctIndex].slice(3)}
+              {currentQuestion && currentQuestion.options[currentQuestion.correct]}
             </div>
           </div>
 
           <p className="text-text-secondary text-sm mb-8">
-            {mockQuestion.explanation}
+            {currentQuestion?.explanation}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3">
@@ -481,7 +523,6 @@ const Challenge: React.FC = () => {
     <div className="min-h-screen bg-bg-primary pt-20 pb-8 px-4 flex items-center justify-center">
       <div className="max-w-[680px] w-full">
         <div className="bg-card rounded-2xl p-8 lg:p-10 text-center">
-          {/* X Icon */}
           <div className="mb-6">
             <XCircle size={80} className="text-red-500 mx-auto" />
           </div>
@@ -493,12 +534,12 @@ const Challenge: React.FC = () => {
           <div className="bg-success-emerald/10 rounded-xl p-4 mb-3">
             <div className="text-sm text-text-secondary mb-1">Correct Answer:</div>
             <div className="text-text-primary font-medium">
-              {mockQuestion.options[mockQuestion.correctIndex].slice(3)}
+              {currentQuestion && currentQuestion.options[currentQuestion.correct]}
             </div>
           </div>
 
           <p className="text-text-secondary text-sm mb-8">
-            {mockQuestion.explanation}
+            {currentQuestion?.explanation}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3">

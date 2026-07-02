@@ -1,9 +1,10 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { WalletProvider, useWallet } from './context/WalletContext';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { WalletProvider } from './context/WalletContext';
 import { ToastProvider } from './context/ToastContext';
 import { GameProvider } from './context/GameContext';
 import GameNotifications from './components/ui/GameNotifications';
 import Navbar from './components/Navbar';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Challenge from './pages/Challenge';
@@ -12,11 +13,6 @@ import Shop from './pages/Shop';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isConnected } = useWallet();
-  return isConnected ? <>{children}</> : <Navigate to="/" replace />;
-}
-
 function AppRoutes() {
   return (
     <>
@@ -24,14 +20,6 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route
-          path="/shop"
-          element={
-            <ProtectedRoute>
-              <Shop />
-            </ProtectedRoute>
-          }
-        />
         <Route
           path="/dashboard"
           element={
@@ -45,6 +33,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <Challenge />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/shop"
+          element={
+            <ProtectedRoute>
+              <Shop />
             </ProtectedRoute>
           }
         />
