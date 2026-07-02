@@ -13,6 +13,18 @@ import Shop from './pages/Shop';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 
+function GlobalCredit() {
+  return (
+    <div
+      className="fixed bottom-16 lg:bottom-2 left-1/2 -translate-x-1/2 z-30 pointer-events-none"
+    >
+      <span className="text-[11px] text-text-secondary opacity-40">
+        Built by Meti pax
+      </span>
+    </div>
+  );
+}
+
 function AppRoutes() {
   return (
     <>
@@ -71,6 +83,7 @@ function App() {
       <GameProvider>
         <WalletProvider>
           <GameNotifications />
+          <GlobalCredit />
           <BrowserRouter>
             <AppRoutes />
           </BrowserRouter>

@@ -74,7 +74,7 @@ Return EXACTLY this JSON (nothing else):
         throw new Error('Missing options');
 
       return parsed;
-    } catch (err) {
+    } catch {
       if (attempt === 2) {
         throw new Error('Failed to generate question. Please try again.');
       }

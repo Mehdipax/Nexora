@@ -4,11 +4,12 @@ import { BrainIcon, FootballIcon, CircuitIcon } from '../components/CategoryIcon
 import Logo from '../components/Logo';
 import { generateQuestion, QuestionData } from '../lib/gemini';
 import { useGame } from '../context/GameContext';
+import type { CategoryType, DifficultyType } from '../context/GameContext';
 
 type ChallengeState = 'category' | 'difficulty' | 'loading' | 'question' | 'correct' | 'wrong';
 
 interface Category {
-  id: string;
+  id: CategoryType;
   name: string;
   description: string;
   xpEasy: string;
@@ -20,7 +21,7 @@ interface Category {
 }
 
 interface Difficulty {
-  id: string;
+  id: DifficultyType;
   name: string;
   xp: number;
   description: string;
@@ -132,14 +133,14 @@ const Challenge: React.FC = () => {
 
     try {
       const q = await generateQuestion(
-        selectedCategory!.id as 'general' | 'football' | 'ai',
-        difficulty.id as 'easy' | 'medium' | 'hard'
+        selectedCategory!.id,
+        difficulty.id
       );
       setCurrentQuestion(q);
       setTimeLeft(30);
       setState('question');
-    } catch (err: any) {
-      setAiError(err.message || 'Failed to generate question.');
+    } catch (err: unknown) {
+      setAiError(err instanceof Error ? err.message : 'Failed to generate question.');
       setState('difficulty');
     }
   };
@@ -154,15 +155,15 @@ const Challenge: React.FC = () => {
     const isCorrect = answerKey !== null && answerKey === currentQuestion.correct;
 
     const xpEarned = awardXP(
-      selectedCategory.id as any,
-      selectedDifficulty.id as any,
+      selectedCategory.id,
+      selectedDifficulty.id,
       isCorrect
     );
 
     addChallenge({
       id: Date.now().toString(),
-      category: selectedCategory.id as any,
-      difficulty: selectedDifficulty.id as any,
+      category: selectedCategory.id,
+      difficulty: selectedDifficulty.id,
       isCorrect,
       xpEarned,
       timestamp: new Date().toISOString(),

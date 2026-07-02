@@ -45,7 +45,7 @@ interface WalletContextType {
   isConnecting: boolean;
   walletAddress: string;
   isCorrectNetwork: boolean;
-  connectWallet: () => Promise<void>;
+  connectWallet: () => Promise<boolean>;
   disconnectWallet: () => void;
   switchToRitual: () => Promise<void>;
   purchaseItem: (
@@ -105,17 +105,17 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     }
   };
 
-  const connectWallet = async () => {
+  const connectWallet = async (): Promise<boolean> => {
     if (!window.ethereum) {
       showToast('error', 'Please install MetaMask to continue');
-      return;
+      return false;
     }
     try {
       setIsConnecting(true);
       const accounts = (await window.ethereum.request({
         method: 'eth_requestAccounts',
       })) as string[];
-      if (!accounts || accounts.length === 0) return;
+      if (!accounts || accounts.length === 0) return false;
       const address = accounts[0];
       setWalletAddress(address);
       setIsConnected(true);
@@ -125,12 +125,14 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       await loadSupabaseState(address);
       const chainId = (await window.ethereum.request({ method: 'eth_chainId' })) as string;
       setIsCorrectNetwork(chainId === RITUAL_CHAIN_ID);
+      return true;
     } catch (err: unknown) {
       if ((err as WalletError).code === 4001) {
         showToast('error', 'Connection rejected by user.');
       } else {
         showToast('error', 'Failed to connect. Please try again.');
       }
+      return false;
     } finally {
       setIsConnecting(false);
     }

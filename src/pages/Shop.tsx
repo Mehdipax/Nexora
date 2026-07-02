@@ -16,6 +16,15 @@ import { useToast } from '../context/ToastContext';
 
 type ItemType = 'xp_booster' | 'premium_pass';
 
+interface PurchaseError {
+  code?: number;
+  message?: string;
+}
+
+function getPurchaseError(err: unknown): PurchaseError {
+  return err instanceof Error ? err : (err as PurchaseError);
+}
+
 interface ConfirmModalProps {
   itemType: ItemType;
   itemName: string;
@@ -227,10 +236,11 @@ const Shop: React.FC = () => {
         error: null,
         txHash,
       });
-    } catch (err: any) {
-      if (err.message === 'WRONG_NETWORK') {
+    } catch (err: unknown) {
+      const purchaseError = getPurchaseError(err);
+      if (purchaseError.message === 'WRONG_NETWORK') {
         setError('⚠️ Switch to Ritual Network to complete this purchase');
-      } else if (err.code === 4001 || err.message?.includes('user rejected')) {
+      } else if (purchaseError.code === 4001 || purchaseError.message?.includes('user rejected')) {
         showToast('error', 'Transaction rejected by user.');
       } else {
         showToast('error', 'Transaction failed. Please try again.');
@@ -293,13 +303,14 @@ const Shop: React.FC = () => {
         error: null,
         txHash,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const purchaseError = getPurchaseError(err);
       setModalState({
         open: true,
         itemType,
         loading: false,
         success: false,
-        error: err.code === 4001 ? 'Transaction rejected by user.' : 'Transaction failed. Please try again.',
+        error: purchaseError.code === 4001 ? 'Transaction rejected by user.' : 'Transaction failed. Please try again.',
         txHash: null,
       });
     }

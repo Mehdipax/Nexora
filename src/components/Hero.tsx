@@ -8,11 +8,12 @@ const Hero: React.FC = () => {
   const { isConnected, isConnecting, connectWallet } = useWallet();
   const navigate = useNavigate();
 
-  const handleCTAClick = () => {
+  const handleCTAClick = async () => {
     if (isConnected) {
       navigate('/dashboard');
     } else {
-      connectWallet();
+      const connected = await connectWallet();
+      if (connected) navigate('/dashboard');
     }
   };
   return (
