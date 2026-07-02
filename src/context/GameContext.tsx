@@ -4,8 +4,15 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useRef,
   ReactNode,
 } from 'react';
+import {
+  saveAchievementDB,
+  saveChallengeDB,
+  saveTransactionDB,
+  syncUserToDB,
+} from '../lib/database';
 
 // ============== TYPES ==============
 
@@ -218,6 +225,7 @@ interface GameContextType {
   setXPBooster: (txHash: string) => void;
   addTransaction: (tx: Transaction) => void;
   loadStateForWallet: (addr: string) => void;
+  loadFromDBState: (partial: Partial<GameState>) => void;
   resetGame: () => void;
   levelUpSignal: number | null;
   rankUpSignal: RankType | null;
@@ -238,6 +246,8 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [gameState, setGameState] = useState<GameState>(() => loadFromStorage());
   const [walletAddr, setWalletAddr] = useState<string>('');
+  const currentWalletRef = useRef('');
+  const syncTimer = useRef<ReturnType<typeof setTimeout>>();
   const [levelUpSignal, setLevelUpSignal] = useState<number | null>(null);
   const [rankUpSignal, setRankUpSignal] = useState<RankType | null>(null);
   const [xpGainSignal, setXpGainSignal] = useState<number | null>(null);
@@ -253,6 +263,16 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     saveToStorage(gameState, walletAddr || undefined);
   }, [gameState, walletAddr]);
+
+  // Debounced Supabase sync on state change
+  useEffect(() => {
+    if (!currentWalletRef.current) return;
+    clearTimeout(syncTimer.current);
+    syncTimer.current = setTimeout(() => {
+      syncUserToDB(currentWalletRef.current, gameState);
+    }, 1500);
+    return () => clearTimeout(syncTimer.current);
+  }, [gameState]);
 
   // XP Booster expiry check every 60s
   useEffect(() => {
@@ -354,6 +374,9 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         prevLevel,
         prevRank
       );
+      if (currentWalletRef.current) {
+        saveChallengeDB(currentWalletRef.current, record);
+      }
     },
     [gameState, updateState]
   );
@@ -398,6 +421,10 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         achievements: [...prev.achievements, id],
       }));
       setNewAchievementSignal(id);
+      if (currentWalletRef.current) {
+        const achievement = ACHIEVEMENTS.find((item) => item.id === id);
+        saveAchievementDB(currentWalletRef.current, id, achievement?.name ?? id);
+      }
     },
     [gameState.achievements]
   );
@@ -423,6 +450,9 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         prevLevel,
         prevRank
       );
+      if (currentWalletRef.current) {
+        saveTransactionDB(currentWalletRef.current, newTx);
+      }
     },
     [gameState, updateState]
   );
@@ -441,6 +471,9 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       xpBoosterExpiry: expiry,
       transactions: [newTx, ...prev.transactions],
     }));
+    if (currentWalletRef.current) {
+      saveTransactionDB(currentWalletRef.current, newTx);
+    }
   }, []);
 
   const addTransaction = useCallback((tx: Transaction) => {
@@ -451,14 +484,44 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   const loadStateForWallet = useCallback((addr: string) => {
+    currentWalletRef.current = addr;
     setWalletAddr(addr);
     const saved = loadFromStorage(addr);
     setGameState(saved);
   }, []);
 
+  const loadFromDBState = useCallback((partial: Partial<GameState>) => {
+    setGameState((prev) => {
+      const merged = { ...prev, ...partial };
+      const level = calcLevel(merged.totalXP);
+      const levelProgress = calcLevelProgress(merged.totalXP);
+      const xpToNextLevel = calcXPToNext(merged.totalXP);
+      const rankScore = calcRankScore(
+        merged.totalXP,
+        merged.correctAnswers,
+        merged.totalChallenges
+      );
+      const rank = calcRank(rankScore);
+      const accuracy =
+        merged.totalChallenges > 0
+          ? merged.correctAnswers / merged.totalChallenges
+          : 0;
+      return {
+        ...merged,
+        level,
+        levelProgress,
+        xpToNextLevel,
+        rankScore,
+        rank,
+        accuracy,
+      };
+    });
+  }, []);
+
   const resetGame = useCallback(() => {
     setGameState({ ...INITIAL_STATE });
     setWalletAddr('');
+    currentWalletRef.current = '';
   }, []);
 
   const clearSignals = useCallback(() => {
@@ -481,6 +544,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setXPBooster,
         addTransaction,
         loadStateForWallet,
+        loadFromDBState,
         resetGame,
         levelUpSignal,
         rankUpSignal,
