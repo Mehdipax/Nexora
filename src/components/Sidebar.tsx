@@ -11,7 +11,7 @@ const Sidebar: React.FC = () => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col fixed left-0 top-16 bottom-16 w-60 bg-secondary-layer z-40">
+      <aside className="hidden lg:flex flex-col fixed left-0 top-16 bottom-16 w-60 premium-surface border-r border-white/10 z-40">
         <nav className="flex-1 py-6 px-3">
           {APP_NAV_ITEMS.map((item) => {
             const isActive = pathname === item.path;
@@ -22,8 +22,8 @@ const Sidebar: React.FC = () => {
                 to={item.path}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-1 transition-all duration-200 ${
                   isActive
-                    ? 'bg-brand-purple/10 border-l-[3px] border-brand-purple text-text-primary'
-                    : 'text-text-secondary hover:text-text-primary hover:bg-card/50'
+                    ? 'bg-brand-purple/[0.14] border-l-[3px] border-brand-purple text-text-primary shadow-purple-glow'
+                    : 'text-text-secondary hover:text-text-primary hover:bg-white/[0.04] hover:border-l-[3px] hover:border-interactive-cyan/40'
                 }`}
               >
                 <item.icon size={20} />
@@ -49,7 +49,7 @@ const Sidebar: React.FC = () => {
       </aside>
 
       {/* Mobile Bottom Tab Bar */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-secondary-layer border-t border-card z-50 pb-safe">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 premium-surface border-t border-white/10 z-50 pb-safe">
         <div className="flex items-center justify-around py-2">
           {APP_NAV_ITEMS.slice(0, 5).map((item) => {
             const isActive = pathname === item.path;

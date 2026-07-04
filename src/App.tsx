@@ -47,9 +47,9 @@ function GlobalCredit() {
         hasBottomNav ? 'bottom-16 lg:bottom-0' : 'bottom-0'
       }`}
       style={{
-        backgroundColor: 'rgba(15,23,42,0.92)',
-        backdropFilter: 'blur(8px)',
-        borderTop: '1px solid rgba(139,92,246,0.15)',
+        background: 'linear-gradient(180deg, rgba(7,17,31,0.72), rgba(7,17,31,0.94))',
+        backdropFilter: 'blur(14px)',
+        borderTop: '1px solid rgba(155,109,255,0.16)',
       }}
     >
       <span className="text-[11px] text-text-secondary opacity-70 pb-1 inline-block">
