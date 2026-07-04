@@ -4,7 +4,8 @@ import { Link, useLocation } from 'react-router-dom';
 import Logo from './Logo';
 import { useWallet } from '../context/WalletContext';
 import { useGame } from '../context/GameContext';
-import { useAvatar, avatarUrl } from '../context/AvatarContext';
+import { useAvatar } from '../context/AvatarContext';
+import { avatarUrl } from '../lib/avatars';
 
 const formatXP = (xp: number): string => {
   return xp >= 1000 ? Math.floor(xp / 1000) + 'K' : xp.toString();
@@ -15,7 +16,7 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const { isConnected, isConnecting, walletAddress, connectWallet } = useWallet();
   const { gameState } = useGame();
-  const { avatarSeed } = useAvatar();
+  const { avatarId } = useAvatar();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -89,9 +90,9 @@ const Navbar: React.FC = () => {
 
               {/* Profile Avatar */}
               <Link to="/profile" className="w-9 h-9 rounded-full bg-gradient-brand flex items-center justify-center hover:scale-105 transition-transform">
-                {avatarSeed ? (
+                {avatarId ? (
                   <img
-                    src={avatarUrl(avatarSeed)}
+                    src={avatarUrl(avatarId)}
                     alt="Avatar"
                     className="w-9 h-9 rounded-full"
                   />

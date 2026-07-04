@@ -1,13 +1,13 @@
 import React from 'react';
-import { AVATAR_OPTIONS, avatarUrl } from '../../context/AvatarContext';
+import { AVATAR_OPTIONS, avatarUrl } from '../../lib/avatars';
 
 interface AvatarPickerModalProps {
-  avatarSeed: string | null | undefined;
+  avatarId: string | null | undefined;
   onClose: () => void;
-  onSelect: (seed: string) => void;
+  onSelect: (avatarId: string) => void;
 }
 
-const AvatarPickerModal: React.FC<AvatarPickerModalProps> = ({ avatarSeed, onClose, onSelect }) => (
+const AvatarPickerModal: React.FC<AvatarPickerModalProps> = ({ avatarId, onClose, onSelect }) => (
   <div
     className="fixed inset-0 z-[90] flex items-center justify-center p-4"
     style={{ backgroundColor: 'rgba(15,23,42,0.9)', backdropFilter: 'blur(4px)' }}
@@ -29,14 +29,14 @@ const AvatarPickerModal: React.FC<AvatarPickerModalProps> = ({ avatarSeed, onClo
           <button
             key={opt.id}
             type="button"
-            onClick={() => onSelect(opt.seed)}
+            onClick={() => onSelect(opt.id)}
             className={`rounded-xl p-1.5 transition-all ${
-              avatarSeed === opt.seed
+              avatarId === opt.id
                 ? 'border-2 border-brand-purple bg-brand-purple/10'
                 : 'border-2 border-transparent bg-secondary-layer hover:border-brand-purple/40'
             }`}
           >
-            <img src={avatarUrl(opt.seed)} alt={opt.id} className="w-full rounded-lg" />
+            <img src={avatarUrl(opt.id)} alt={opt.label} className="w-full rounded-lg" />
           </button>
         ))}
       </div>

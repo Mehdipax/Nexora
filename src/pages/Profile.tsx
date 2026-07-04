@@ -3,7 +3,8 @@ import { Copy, Check, Shield, Receipt, ExternalLink, Flame, Crown, Trophy, Spark
 import Sidebar from '../components/Sidebar';
 import { useGame, RANK_COLORS, ACHIEVEMENTS } from '../context/GameContext';
 import { useWallet } from '../context/WalletContext';
-import { useAvatar, avatarUrl } from '../context/AvatarContext';
+import { useAvatar } from '../context/AvatarContext';
+import { avatarUrl } from '../lib/avatars';
 import AvatarPickerModal from '../components/profile/AvatarPickerModal';
 import EmptyState from '../components/profile/EmptyState';
 import InventoryList from '../components/profile/InventoryList';
@@ -15,7 +16,7 @@ import { formatTimestamp, shortenAddress } from '../lib/format';
 const Profile: React.FC = () => {
   const { gameState } = useGame();
   const { walletAddress } = useWallet();
-  const { avatarSeed, setAvatarSeed } = useAvatar();
+  const { avatarId, setAvatarId } = useAvatar();
   const [copied, setCopied] = useState(false);
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
 
@@ -48,9 +49,9 @@ const Profile: React.FC = () => {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_0%,rgba(155,109,255,0.18),transparent_32%),radial-gradient(circle_at_88%_12%,rgba(251,191,36,0.14),transparent_30%)]" />
             <div className="relative z-10 flex flex-col sm:flex-row items-start gap-6">
               <div className="flex flex-col items-center flex-shrink-0">
-                {avatarSeed ? (
+                {avatarId ? (
                   <img
-                    src={avatarUrl(avatarSeed)}
+                    src={avatarUrl(avatarId)}
                     alt="Avatar"
                     className="w-24 h-24 rounded-3xl flex-shrink-0 bg-secondary-layer ring-2 ring-brand-purple/30"
                   />
@@ -64,7 +65,7 @@ const Profile: React.FC = () => {
                   onClick={() => setShowAvatarPicker(true)}
                   className="text-brand-purple text-xs font-medium mt-2 hover:underline"
                 >
-                  {avatarSeed ? 'Change Avatar' : 'Choose Avatar'}
+                  {avatarId ? 'Change Avatar' : 'Choose Avatar'}
                 </button>
               </div>
               <div className="flex-1">
@@ -254,10 +255,10 @@ const Profile: React.FC = () => {
 
       {showAvatarPicker && (
         <AvatarPickerModal
-          avatarSeed={avatarSeed}
+          avatarId={avatarId}
           onClose={() => setShowAvatarPicker(false)}
-          onSelect={(seed) => {
-            setAvatarSeed(seed);
+          onSelect={(selectedAvatarId) => {
+            setAvatarId(selectedAvatarId, walletAddress);
             setShowAvatarPicker(false);
           }}
         />

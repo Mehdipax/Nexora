@@ -1,81 +1,100 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-
-export interface AvatarOption {
-  id: string;
-  seed: string;
-}
-
-// Using DiceBear "notionists" style — clean, modern, flat illustrated
-// human portraits, sharp vector (infinitely HD), no cartoonish look.
-export const AVATAR_OPTIONS: AvatarOption[] = [
-  { id: 'a1', seed: 'Phoenix-2026' },
-  { id: 'a2', seed: 'Cypher-Nova' },
-  { id: 'a3', seed: 'Blaze-Ryder' },
-  { id: 'a4', seed: 'Vortex-Kai' },
-  { id: 'a5', seed: 'Aurora-Sky' },
-  { id: 'a6', seed: 'Nova-Ember' },
-  { id: 'a7', seed: 'Lyra-Frost' },
-  { id: 'a8', seed: 'Echo-Star' },
-];
+import React, { createContext, useCallback, useContext, useState, ReactNode } from 'react';
+import { saveAvatarIdDB } from '../lib/database';
+import {
+  AVATAR_OPTIONS,
+  getDefaultAvatarIdForWallet,
+  isValidAvatarId,
+} from '../lib/avatars';
 
 const STORAGE_KEY = 'nexora_avatar_seed_v2';
 
-export function avatarUrl(seed: string): string {
-  return `https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(seed)}&backgroundColor=8B5CF6,38BDF8,1E293B&backgroundType=gradientLinear`;
+function cacheKeyForWallet(walletAddress?: string) {
+  return walletAddress ? `${STORAGE_KEY}_${walletAddress.toLowerCase()}` : STORAGE_KEY;
 }
 
-function getDefaultSeedForWallet(walletAddress: string): string {
-  if (!walletAddress) return AVATAR_OPTIONS[0].seed;
-  let hash = 0;
-  for (let i = 0; i < walletAddress.length; i++) {
-    hash = (hash * 31 + walletAddress.charCodeAt(i)) % 1000003;
+function loadCachedAvatarId(walletAddress?: string): string | null {
+  try {
+    const walletCached = walletAddress ? localStorage.getItem(cacheKeyForWallet(walletAddress)) : null;
+    if (isValidAvatarId(walletCached)) return walletCached;
+    if (walletAddress) return null;
+
+    const cached = localStorage.getItem(STORAGE_KEY);
+    return isValidAvatarId(cached) ? cached : null;
+  } catch {
+    return null;
   }
-  const index = Math.abs(hash) % AVATAR_OPTIONS.length;
-  return AVATAR_OPTIONS[index].seed;
+}
+
+function cacheAvatarId(avatarId: string, walletAddress?: string) {
+  try {
+    localStorage.setItem(STORAGE_KEY, avatarId);
+    if (walletAddress) {
+      localStorage.setItem(cacheKeyForWallet(walletAddress), avatarId);
+    }
+  } catch {
+    // ignore
+  }
 }
 
 interface AvatarContextType {
-  avatarSeed: string | null;
-  setAvatarSeed: (seed: string) => void;
+  avatarId: string;
+  avatarSeed: string;
+  setAvatarId: (avatarId: string, walletAddress?: string) => void;
+  setAvatarSeed: (avatarId: string, walletAddress?: string) => void;
+  hydrateAvatarForWallet: (walletAddress: string, savedAvatarId?: string | null) => void;
   assignDefaultIfMissing: (walletAddress: string) => void;
 }
 
 const AvatarContext = createContext<AvatarContextType | null>(null);
 
 export const AvatarProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [avatarSeed, setAvatarSeedState] = useState<string | null>(() => {
-    try {
-      return localStorage.getItem(STORAGE_KEY);
-    } catch {
-      return null;
-    }
-  });
+  const [avatarId, setAvatarIdState] = useState<string>(() => loadCachedAvatarId() ?? AVATAR_OPTIONS[0].id);
 
-  const setAvatarSeed = useCallback((seed: string) => {
-    setAvatarSeedState(seed);
-    try {
-      localStorage.setItem(STORAGE_KEY, seed);
-    } catch {
-      // ignore
+  const persistAvatarId = useCallback((nextAvatarId: string, walletAddress?: string) => {
+    if (!isValidAvatarId(nextAvatarId)) return;
+    setAvatarIdState(nextAvatarId);
+    cacheAvatarId(nextAvatarId, walletAddress);
+    if (walletAddress) {
+      void saveAvatarIdDB(walletAddress, nextAvatarId);
     }
   }, []);
 
-  const assignDefaultIfMissing = useCallback((walletAddress: string) => {
-    try {
-      const existing = localStorage.getItem(STORAGE_KEY);
-      if (existing) {
-        setAvatarSeedState(existing);
-        return;
-      }
-    } catch {
-      // ignore
+  const hydrateAvatarForWallet = useCallback((walletAddress: string, savedAvatarId?: string | null) => {
+    if (isValidAvatarId(savedAvatarId)) {
+      setAvatarIdState(savedAvatarId);
+      cacheAvatarId(savedAvatarId, walletAddress);
+      return;
     }
-    const defaultSeed = getDefaultSeedForWallet(walletAddress);
-    setAvatarSeed(defaultSeed);
-  }, [setAvatarSeed]);
+
+    const cachedAvatarId = loadCachedAvatarId(walletAddress);
+    if (cachedAvatarId) {
+      setAvatarIdState(cachedAvatarId);
+      cacheAvatarId(cachedAvatarId, walletAddress);
+      void saveAvatarIdDB(walletAddress, cachedAvatarId);
+      return;
+    }
+
+    const defaultAvatarId = getDefaultAvatarIdForWallet(walletAddress);
+    setAvatarIdState(defaultAvatarId);
+    cacheAvatarId(defaultAvatarId, walletAddress);
+    void saveAvatarIdDB(walletAddress, defaultAvatarId);
+  }, []);
+
+  const assignDefaultIfMissing = useCallback((walletAddress: string) => {
+    hydrateAvatarForWallet(walletAddress, loadCachedAvatarId(walletAddress));
+  }, [hydrateAvatarForWallet]);
 
   return (
-    <AvatarContext.Provider value={{ avatarSeed, setAvatarSeed, assignDefaultIfMissing }}>
+    <AvatarContext.Provider
+      value={{
+        avatarId,
+        avatarSeed: avatarId,
+        setAvatarId: persistAvatarId,
+        setAvatarSeed: persistAvatarId,
+        hydrateAvatarForWallet,
+        assignDefaultIfMissing,
+      }}
+    >
       {children}
     </AvatarContext.Provider>
   );

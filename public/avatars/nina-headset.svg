@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="320" height="320" role="img" aria-label="Nexora avatar nina-headset">
+<defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#8b5cf6"/><stop offset=".55" stop-color="#07111f"/><stop offset="1" stop-color="#f0abfc"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<path d="M80 284c14-59 138-59 152 0v68H80z" fill="#101827"/><path d="M106 289c28 30 76 30 100 0" fill="none" stroke="#f0abfc" stroke-width="8"/><text x="156" y="332" text-anchor="middle" font-family="Arial Black" font-size="42" fill="#f0abfc" opacity=".95">N</text>
+<path d="M95 151c11-58 92-76 129-31 24 29 7 88-56 90-58 2-83-23-73-59z" fill="#1e1b4b"/>
+<ellipse cx="156" cy="180" rx="58" ry="67" fill="#f7c9a9"/>
+<path d="M105 166c18-16 40-18 60-8 18-11 41-8 55 8-5-47-99-58-115 0z" fill="#1e1b4b" opacity=".95"/>
+<circle cx="133" cy="174" r="5" fill="#08111f"/><circle cx="181" cy="174" r="5" fill="#08111f"/>
+<path d="M144 204c10 9 29 9 39 0" stroke="#7c2d12" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M158 178l-8 19h15" stroke="#9a5a3d" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M96 164c3-56 116-56 119 0" fill="none" stroke="#f0abfc" stroke-width="10"/><rect x="82" y="154" width="25" height="48" rx="12" fill="#f0abfc"/><path d="M213 190c23 6 24 19 2 25" stroke="#f0abfc" stroke-width="6" fill="none"/>
+<path d="M24 296C86 274 226 275 296 295" stroke="#f0abfc" stroke-width="8" opacity=".35" filter="url(#glow)"/>
+</svg>
