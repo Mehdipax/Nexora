@@ -68,7 +68,7 @@ const Leaderboard: React.FC = () => {
       <Sidebar />
       <main className="lg:pl-60 px-4">
         <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-black text-text-primary text-center">Leaderboard</h1>
+        <h1 className="font-heading text-4xl font-extrabold text-text-primary text-center tracking-[-0.03em]">Leaderboard</h1>
         <p className="text-text-secondary text-center mt-2 mb-8">
           Compete with the best. Prove your knowledge.
         </p>

@@ -38,15 +38,15 @@ const Hero: React.FC = () => {
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
         {/* Main Heading */}
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-text-primary mb-2 leading-tight tracking-[-0.04em] drop-shadow-[0_0_34px_rgba(155,109,255,0.16)]">
+        <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-extrabold text-text-primary mb-3 leading-[0.98] tracking-[-0.032em] drop-shadow-[0_0_34px_rgba(155,109,255,0.16)]">
           Challenge Your Mind.
         </h1>
-        <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-8 leading-tight tracking-[-0.035em] bg-gradient-to-r from-text-secondary via-interactive-cyan to-gold bg-clip-text text-transparent">
+        <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-8 leading-[1.02] tracking-[-0.028em] bg-gradient-to-r from-text-secondary via-interactive-cyan to-gold bg-clip-text text-transparent">
           Climb the Ranks.
         </h2>
 
         {/* Description */}
-        <p className="text-lg sm:text-xl text-text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
+        <p className="text-base sm:text-lg text-text-secondary max-w-2xl mx-auto mb-10 leading-8">
           AI-powered challenges. Web3 identity. Real competition.
         </p>
 
@@ -62,12 +62,12 @@ const Hero: React.FC = () => {
           {isConnecting ? (
             <>
               <Loader2 size={22} className="relative z-10 animate-spin" />
-              <span className="relative z-10 text-lg">Connecting...</span>
+              <span className="relative z-10 text-base sm:text-lg">Connecting...</span>
             </>
           ) : (
             <>
               <Zap size={22} className="relative z-10" />
-              <span className="relative z-10 text-lg">
+              <span className="relative z-10 text-base sm:text-lg">
                 {isConnected ? 'Go to Dashboard' : 'Connect Wallet to Start'}
               </span>
             </>

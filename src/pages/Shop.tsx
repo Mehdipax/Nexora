@@ -347,7 +347,7 @@ const Shop: React.FC = () => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl lg:text-4xl font-bold text-text-primary mb-2">Shop</h1>
+            <h1 className="font-heading text-3xl lg:text-4xl font-bold text-text-primary mb-2 tracking-[-0.03em]">Shop</h1>
             <p className="text-text-secondary mb-4">Enhance your Nexora experience</p>
             <div
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full"

@@ -209,7 +209,7 @@ const Challenge: React.FC = () => {
   const renderCategorySelection = () => (
     <div className="min-h-screen bg-transparent pt-20 pb-8 px-4">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl lg:text-4xl font-bold text-text-primary text-center mb-4">
+        <h1 className="font-heading text-3xl lg:text-4xl font-bold text-text-primary text-center mb-4 tracking-[-0.03em]">
           Choose Your Challenge
         </h1>
         <p className="text-text-secondary text-center mb-10">

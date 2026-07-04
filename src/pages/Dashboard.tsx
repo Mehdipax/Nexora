@@ -96,8 +96,8 @@ const Dashboard: React.FC = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {/* Card A - Level */}
             <div className="bg-card rounded-2xl p-5 border border-brand-purple/15">
-              <p className="text-text-secondary text-xs mb-3">Current Level</p>
-              <p className="text-4xl font-black text-brand-purple">{gameState.level}</p>
+              <p className="eyebrow-label text-text-secondary text-[11px] mb-3">Current Level</p>
+              <p className="stat-number text-4xl font-black text-brand-purple">{gameState.level}</p>
               <div className="h-2 bg-secondary-layer rounded-full mt-3">
                 <div
                   className="h-2 bg-gradient-brand rounded-full transition-all"
@@ -114,7 +114,7 @@ const Dashboard: React.FC = () => {
 
             {/* Card B - Rank */}
             <div className="bg-card rounded-2xl p-5 border border-brand-purple/15">
-              <p className="text-text-secondary text-xs mb-3">Current Rank</p>
+              <p className="eyebrow-label text-text-secondary text-[11px] mb-3">Current Rank</p>
               <div
                 className="w-12 h-12 rounded-full flex items-center justify-center"
                 style={{
@@ -134,10 +134,10 @@ const Dashboard: React.FC = () => {
 
             {/* Card C - Streak */}
             <div className="bg-card rounded-2xl p-5 border border-brand-purple/15">
-              <p className="text-text-secondary text-xs mb-3">Day Streak</p>
+              <p className="eyebrow-label text-text-secondary text-[11px] mb-3">Day Streak</p>
               <div className="flex items-center gap-2">
                 <Flame size={28} className="text-orange-500" />
-                <p className="text-4xl font-black text-orange-500">{gameState.streak}</p>
+                <p className="stat-number text-4xl font-black text-orange-500">{gameState.streak}</p>
               </div>
               <p className="text-text-secondary text-xs mt-2">
                 Day {nextStreakDay} → +{nextStreakXP} XP
@@ -152,8 +152,8 @@ const Dashboard: React.FC = () => {
                 backgroundColor: 'rgba(251,191,36,0.02)',
               }}
             >
-              <p className="text-text-secondary text-xs mb-3">Total XP</p>
-              <p className="text-4xl font-black text-gold">
+              <p className="eyebrow-label text-text-secondary text-[11px] mb-3">Total XP</p>
+              <p className="stat-number text-4xl font-black text-gold">
                 ⚡ {gameState.totalXP}
               </p>
               <p className="text-text-secondary text-xs mt-2">XP Earned Total</p>

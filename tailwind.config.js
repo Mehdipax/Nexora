@@ -18,6 +18,14 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        heading: ['Sora', 'Inter', 'system-ui', 'sans-serif'],
+        numeric: ['Inter Tight', 'Inter', 'system-ui', 'sans-serif'],
+      },
+      boxShadow: {
+        'premium': '0 24px 80px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(155, 109, 255, 0.12)',
+        'purple-glow': '0 0 32px rgba(155, 109, 255, 0.22)',
+        'cyan-glow': '0 0 30px rgba(55, 213, 255, 0.18)',
+        'gold-glow': '0 0 28px rgba(255, 209, 102, 0.18)',
       },
       boxShadow: {
         'premium': '0 24px 80px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(155, 109, 255, 0.12)',

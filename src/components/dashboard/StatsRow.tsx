@@ -61,7 +61,7 @@ const StatsRow: React.FC = () => {
           </div>
 
           {/* Value */}
-          <div className="text-3xl lg:text-4xl font-bold mb-1" style={{ color: stat.valueColor }}>
+          <div className="stat-number text-3xl lg:text-4xl font-bold mb-2" style={{ color: stat.valueColor }}>
             {stat.value}
           </div>
 

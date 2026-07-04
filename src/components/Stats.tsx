@@ -39,7 +39,7 @@ const Stats: React.FC = () => {
               </div>
 
               {/* Value */}
-              <div className="text-4xl lg:text-5xl font-bold text-text-primary mb-1">
+              <div className="stat-number text-4xl lg:text-5xl font-bold text-text-primary mb-2">
                 {stat.value}
               </div>
 

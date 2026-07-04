@@ -54,7 +54,7 @@ const Settings: React.FC = () => {
   return (
     <>
     <AppShell maxWidth="3xl">
-          <h1 className="text-3xl font-bold text-text-primary mb-8">Settings</h1>
+          <h1 className="font-heading text-3xl font-bold text-text-primary mb-8 tracking-[-0.03em]">Settings</h1>
 
           {/* Account Card */}
           <Surface className="mb-6">
