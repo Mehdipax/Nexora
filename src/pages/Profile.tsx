@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
-import { Copy, Check, Shield, ShoppingBag, Receipt, ExternalLink, Flame, Crown, Trophy, Sparkles, WalletCards } from 'lucide-react';
+import { Copy, Check, Shield, Receipt, ExternalLink, Flame, Crown, Trophy, Sparkles, WalletCards } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import { useGame, RANK_COLORS, ACHIEVEMENTS } from '../context/GameContext';
 import { useWallet } from '../context/WalletContext';
-import { useAvatar, AVATAR_OPTIONS, avatarUrl } from '../context/AvatarContext';
+import { useAvatar, avatarUrl } from '../context/AvatarContext';
+import AvatarPickerModal from '../components/profile/AvatarPickerModal';
+import EmptyState from '../components/profile/EmptyState';
+import InventoryList from '../components/profile/InventoryList';
+import ProfileStatCard from '../components/profile/ProfileStatCard';
+import StreakProgress from '../components/profile/StreakProgress';
+import { formatTimestamp, shortenAddress } from '../lib/format';
 
-const STREAK_BONUS: Record<number, number> = { 1: 10, 2: 20, 3: 30, 4: 40, 5: 50 };
-
-function shortAddr(a: string) {
-  return a ? a.slice(0, 6) + '...' + a.slice(-4) : '';
-}
-function formatDate(ts: number) {
-  return new Date(ts).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-}
 
 const Profile: React.FC = () => {
   const { gameState } = useGame();
@@ -62,6 +60,7 @@ const Profile: React.FC = () => {
                   </div>
                 )}
                 <button
+                  type="button"
                   onClick={() => setShowAvatarPicker(true)}
                   className="text-brand-purple text-xs font-medium mt-2 hover:underline"
                 >
@@ -73,8 +72,8 @@ const Profile: React.FC = () => {
                   <Sparkles size={13} /> Collectible player profile
                 </div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-mono text-text-primary text-xl font-black break-all">{shortAddr(walletAddress)}</span>
-                  <button onClick={handleCopy} className="bg-secondary-layer rounded-lg p-1.5">
+                  <span className="font-mono text-text-primary text-xl font-black break-all">{shortenAddress(walletAddress)}</span>
+                  <button type="button" onClick={handleCopy} className="bg-secondary-layer rounded-lg p-1.5" aria-label="Copy wallet address">
                     {copied ? <Check size={14} className="text-success-emerald" /> : <Copy size={14} className="text-text-secondary" />}
                   </button>
                 </div>
@@ -106,18 +105,10 @@ const Profile: React.FC = () => {
 
           {/* Stats Grid */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="premium-surface rounded-2xl p-4 text-center">
-              <p className="font-numeric text-gold font-bold text-lg">⚡ {gameState.totalXP} XP</p>
-            </div>
-            <div className="premium-surface rounded-2xl p-4 text-center">
-              <p className="font-numeric text-brand-purple font-bold text-lg">Level {gameState.level}</p>
-            </div>
-            <div className="premium-surface rounded-2xl p-4 text-center">
-              <p className="font-numeric font-bold text-lg" style={{ color: rankColor }}>{gameState.rank}</p>
-            </div>
-            <div className="premium-surface rounded-2xl p-4 text-center">
-              <p className="font-numeric text-interactive-cyan font-bold text-lg">{gameState.totalChallenges} Done</p>
-            </div>
+            <ProfileStatCard className="text-gold">⚡ {gameState.totalXP} XP</ProfileStatCard>
+            <ProfileStatCard className="text-brand-purple">Level {gameState.level}</ProfileStatCard>
+            <ProfileStatCard className="" textStyle={{ color: rankColor }}>{gameState.rank}</ProfileStatCard>
+            <ProfileStatCard className="text-interactive-cyan">{gameState.totalChallenges} Done</ProfileStatCard>
           </div>
 
           {/* Progress */}
@@ -159,28 +150,7 @@ const Profile: React.FC = () => {
               </div>
               <span className="text-gold text-xs">150 XP potential</span>
             </div>
-            <div className="flex justify-between items-start">
-              {[1, 2, 3, 4, 5].map((day) => {
-                const isCompleted = day <= gameState.streak;
-                const isCurrent = day === gameState.streak + 1 && gameState.streak < 5;
-                return (
-                  <div key={day} className="flex flex-col items-center">
-                    <div
-                      className={`w-11 h-11 rounded-full flex items-center justify-center ${
-                        isCompleted ? 'bg-brand-purple/15 border-2 border-brand-purple'
-                        : isCurrent ? 'bg-interactive-cyan/10 border-2 border-interactive-cyan'
-                        : 'bg-secondary-layer border border-brand-purple/10'
-                      }`}
-                    >
-                      <span className={`font-bold text-xs ${isCurrent ? 'text-interactive-cyan' : 'text-text-secondary opacity-40'}`}>
-                        {day}
-                      </span>
-                    </div>
-                    <p className="text-[10px] text-text-secondary mt-1">+{STREAK_BONUS[day]}</p>
-                  </div>
-                );
-              })}
-            </div>
+            <StreakProgress streak={gameState.streak} />
             <p className="text-center text-xs text-text-secondary mt-4">Complete all 5 days → <span className="text-gold font-bold">150 XP bonus!</span></p>
           </div>
 
@@ -210,28 +180,7 @@ const Profile: React.FC = () => {
           {/* My Items */}
           <div className="premium-surface rounded-[1.5rem] p-6">
             <h2 className="font-black text-2xl text-text-primary mb-4">Inventory</h2>
-            {!gameState.xpBoosterActive && !gameState.premiumStatus ? (
-              <div className="text-center py-4">
-                <ShoppingBag size={48} className="text-text-secondary opacity-20 mx-auto mb-3" />
-                <p className="text-text-secondary text-sm">No items yet. Visit the Shop.</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {gameState.xpBoosterActive && (
-                  <div className="bg-secondary-layer rounded-xl p-4 flex items-center justify-between">
-                    <span className="flex items-center gap-2 text-text-primary font-semibold text-sm">
-                      ⚡ XP Booster <span className="bg-success-emerald/15 text-success-emerald text-[10px] px-2 py-0.5 rounded-full">Active</span>
-                    </span>
-                  </div>
-                )}
-                {gameState.premiumStatus && (
-                  <div className="bg-secondary-layer rounded-xl p-4 flex items-center gap-2">
-                    <span className="text-text-primary font-semibold text-sm">⭐ Premium Pass</span>
-                    <span className="bg-success-emerald/15 text-success-emerald text-[10px] px-2 py-0.5 rounded-full">Active</span>
-                  </div>
-                )}
-              </div>
-            )}
+            <InventoryList premiumStatus={gameState.premiumStatus} xpBoosterActive={gameState.xpBoosterActive} />
           </div>
 
           {/* Statistics */}
@@ -272,10 +221,7 @@ const Profile: React.FC = () => {
           <div className="premium-surface rounded-[1.5rem] p-6">
             <h2 className="font-black text-2xl text-text-primary mb-5">Ritual Ledger</h2>
             {gameState.transactions.length === 0 ? (
-              <div className="text-center py-4">
-                <Receipt size={40} className="text-text-secondary opacity-20 mx-auto mb-3" />
-                <p className="text-text-secondary text-sm">No transactions yet.</p>
-              </div>
+              <EmptyState icon={<Receipt size={40} />} message="No transactions yet." />
             ) : (
               <div className="divide-y divide-secondary-layer">
                 {gameState.transactions.map((tx) => (
@@ -284,7 +230,7 @@ const Profile: React.FC = () => {
                       <span className={`text-xs px-2 py-1 rounded-full ${tx.type === 'xp_booster' ? 'bg-gold/15 text-gold' : 'bg-brand-purple/15 text-brand-purple'}`}>
                         {tx.type === 'xp_booster' ? 'XP Booster' : 'Premium Pass'}
                       </span>
-                      <p className="text-text-secondary text-xs mt-1">{formatDate(tx.timestamp)}</p>
+                      <p className="text-text-secondary text-xs mt-1">{formatTimestamp(tx.timestamp)}</p>
                     </div>
                     <div className="text-right">
                       <p className="text-gold text-sm font-bold">{tx.amount} RITUAL</p>
@@ -307,42 +253,14 @@ const Profile: React.FC = () => {
       </main>
 
       {showAvatarPicker && (
-        <div
-          className="fixed inset-0 z-[90] flex items-center justify-center p-4"
-          style={{ backgroundColor: 'rgba(15,23,42,0.9)', backdropFilter: 'blur(4px)' }}
-          onClick={() => setShowAvatarPicker(false)}
-        >
-          <div
-            className="bg-card rounded-2xl p-6 max-w-sm w-full"
-            style={{ border: '1px solid rgba(139,92,246,0.2)' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="text-lg font-bold text-text-primary mb-4 text-center">
-              Choose Your Avatar
-            </h3>
-            <div className="grid grid-cols-4 gap-3">
-              {AVATAR_OPTIONS.map((opt) => (
-                <button
-                  key={opt.id}
-                  onClick={() => { setAvatarSeed(opt.seed); setShowAvatarPicker(false); }}
-                  className={`rounded-xl p-1.5 transition-all ${
-                    avatarSeed === opt.seed
-                      ? 'border-2 border-brand-purple bg-brand-purple/10'
-                      : 'border-2 border-transparent bg-secondary-layer hover:border-brand-purple/40'
-                  }`}
-                >
-                  <img src={avatarUrl(opt.seed)} alt={opt.id} className="w-full rounded-lg" />
-                </button>
-              ))}
-            </div>
-            <button
-              onClick={() => setShowAvatarPicker(false)}
-              className="w-full mt-5 py-2.5 bg-secondary-layer text-text-primary rounded-xl text-sm font-medium"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
+        <AvatarPickerModal
+          avatarSeed={avatarSeed}
+          onClose={() => setShowAvatarPicker(false)}
+          onSelect={(seed) => {
+            setAvatarSeed(seed);
+            setShowAvatarPicker(false);
+          }}
+        />
       )}
     </div>
   );
