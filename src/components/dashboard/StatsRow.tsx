@@ -50,7 +50,7 @@ const StatsRow: React.FC = () => {
       {stats.map((stat, index) => (
         <div
           key={index}
-          className="bg-card rounded-xl p-5 lg:p-6 border border-secondary-layer/50 hover:border-brand-purple/30 transition-all duration-200"
+          className="premium-surface rounded-xl p-5 lg:p-6 border border-secondary-layer/50 hover:border-brand-purple/30 transition-all duration-200"
         >
           {/* Icon */}
           <div
@@ -61,7 +61,7 @@ const StatsRow: React.FC = () => {
           </div>
 
           {/* Value */}
-          <div className="text-3xl lg:text-4xl font-bold mb-1" style={{ color: stat.valueColor }}>
+          <div className="stat-number text-3xl lg:text-4xl font-bold mb-2" style={{ color: stat.valueColor }}>
             {stat.value}
           </div>
 

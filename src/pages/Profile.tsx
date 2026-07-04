@@ -40,7 +40,7 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-bg-primary pt-20 lg:pt-24 pb-20 lg:pb-8">
+    <div className="min-h-screen bg-transparent pt-20 lg:pt-24 pb-20 lg:pb-8">
       <Sidebar />
       <main className="lg:pl-60">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
@@ -91,16 +91,16 @@ const Profile: React.FC = () => {
           {/* Stats Grid */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-secondary-layer rounded-xl p-4 text-center">
-              <p className="text-gold font-bold text-lg">⚡ {gameState.totalXP} XP</p>
+              <p className="font-numeric text-gold font-bold text-lg">⚡ {gameState.totalXP} XP</p>
             </div>
             <div className="bg-secondary-layer rounded-xl p-4 text-center">
-              <p className="text-brand-purple font-bold text-lg">Level {gameState.level}</p>
+              <p className="font-numeric text-brand-purple font-bold text-lg">Level {gameState.level}</p>
             </div>
             <div className="bg-secondary-layer rounded-xl p-4 text-center">
-              <p className="font-bold text-lg" style={{ color: rankColor }}>{gameState.rank}</p>
+              <p className="font-numeric font-bold text-lg" style={{ color: rankColor }}>{gameState.rank}</p>
             </div>
             <div className="bg-secondary-layer rounded-xl p-4 text-center">
-              <p className="text-interactive-cyan font-bold text-lg">{gameState.totalChallenges} Done</p>
+              <p className="font-numeric text-interactive-cyan font-bold text-lg">{gameState.totalChallenges} Done</p>
             </div>
           </div>
 
@@ -139,7 +139,7 @@ const Profile: React.FC = () => {
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-2">
                 <Flame size={28} className="text-orange-500" />
-                <span className="text-3xl font-black text-orange-500">{gameState.streak} Day Streak</span>
+                <span className="stat-number text-3xl font-black text-orange-500">{gameState.streak} Day Streak</span>
               </div>
               <span className="text-gold text-xs">150 XP potential</span>
             </div>

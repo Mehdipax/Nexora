@@ -1,65 +1,92 @@
 import React from 'react';
-import { Brain, Shield, Trophy } from 'lucide-react';
+import { Brain, Shield, Trophy, Sparkles } from 'lucide-react';
 
 const features = [
   {
     icon: Brain,
-    title: 'AI-Powered Challenges',
+    eyebrow: 'Challenge Engine',
+    title: 'Questions that feel alive',
     description:
-      'Adaptive learning experiences powered by cutting-edge AI. Every challenge dynamically adjusts to your skill level.',
+      'Gemini-powered prompts generate focused quiz runs across knowledge, football, and AI so every session feels fresh instead of recycled.',
     gradient: 'from-brand-purple to-interactive-cyan',
   },
   {
     icon: Shield,
-    title: 'Web3 Identity',
+    eyebrow: 'Identity Layer',
+    title: 'Progress tied to your wallet',
     description:
-      'Your achievements, your data. Own your competitive identity with blockchain-verified credentials and records.',
+      'Your level, streaks, items, and achievements follow the wallet you connect — keeping competition personal and portable.',
     gradient: 'from-interactive-cyan to-success-emerald',
   },
   {
     icon: Trophy,
-    title: 'Rank & Compete',
+    eyebrow: 'Competition Loop',
+    title: 'A leaderboard with pressure',
     description:
-      'Climb the global leaderboard. Earn ranks from Bronze to Diamond. Prove your skills against the best.',
+      'XP, streak bonuses, premium status, and visible rank create a clear loop: answer, improve, climb, repeat.',
     gradient: 'from-gold to-brand-purple',
   },
 ];
 
+const promiseHighlights = [
+  'No bloated courses — just fast skill reps.',
+  'Every reward path is visible before you play.',
+];
+
 const Features: React.FC = () => {
   return (
-    <section className="relative py-20 lg:py-28 bg-bg-primary">
+    <section className="relative py-20 lg:py-28 bg-transparent overflow-hidden">
+      <div className="absolute left-0 top-1/4 h-80 w-80 -translate-x-1/2 rounded-full bg-brand-purple/10 blur-3xl" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-primary mb-4">
-            Why Nexora?
-          </h2>
-          <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-            The next generation of competitive learning, built for the Web3 era.
-          </p>
+        <div className="mb-14 grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
+          <div>
+            <p className="eyebrow-label text-brand-purple text-xs mb-4">Product promise</p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-primary mb-4">
+              Built for the moment you decide to get sharper.
+            </h2>
+          </div>
+          <div className="premium-surface rounded-3xl p-5 lg:p-6">
+            <div className="flex items-start gap-3">
+              <Sparkles className="mt-1 text-gold" size={22} />
+              <div>
+                <p className="text-text-primary font-semibold">Nexora is a compact performance loop.</p>
+                <p className="text-text-secondary text-sm mt-1">
+                  Enter a challenge, prove recall under time pressure, and leave with measurable progress.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Feature Cards */}
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
           {features.map((feature, index) => (
-            <div
-              key={index}
-              className="group relative p-6 lg:p-8 bg-card rounded-2xl border border-brand-purple/20 hover:border-brand-purple/50 transition-all duration-300 hover:shadow-lg hover:shadow-brand-purple/10"
+            <article
+              key={feature.title}
+              className="group relative overflow-hidden p-6 lg:p-8 premium-surface rounded-3xl hover:border-brand-purple/45 transition-all duration-300 hover:-translate-y-1 hover:shadow-purple-glow"
             >
-              {/* Icon */}
-              <div
-                className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br ${feature.gradient} mb-6 group-hover:scale-110 transition-transform duration-300`}
-              >
-                <feature.icon size={28} className="text-white" />
+              <div className="absolute -right-16 -top-16 h-36 w-36 rounded-full bg-brand-purple/10 blur-3xl group-hover:bg-interactive-cyan/10 transition-colors" />
+              <div className="mb-8 flex items-center justify-between">
+                <div
+                  className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br shadow-premium ${feature.gradient} group-hover:scale-110 transition-transform duration-300`}
+                >
+                  <feature.icon size={28} className="text-white" />
+                </div>
+                <span className="font-numeric text-sm text-text-secondary/60">0{index + 1}</span>
               </div>
 
-              {/* Title */}
-              <h3 className="text-xl lg:text-2xl font-bold text-text-primary mb-3">
+              <p className="eyebrow-label text-[10px] text-interactive-cyan mb-3">{feature.eyebrow}</p>
+              <h3 className="text-xl lg:text-2xl font-bold text-text-primary mb-4">
                 {feature.title}
               </h3>
+              <p className="text-sm text-text-secondary leading-7">{feature.description}</p>
+            </article>
+          ))}
+        </div>
 
-              {/* Description */}
-              <p className="text-text-secondary leading-relaxed">{feature.description}</p>
+        <div className="mt-8 grid gap-4 md:grid-cols-2">
+          {promiseHighlights.map((highlight) => (
+            <div key={highlight} className="premium-badge rounded-2xl px-5 py-4 text-sm text-text-secondary">
+              <span className="text-gold">✦</span> {highlight}
             </div>
           ))}
         </div>
