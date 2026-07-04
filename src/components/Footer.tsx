@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, ShieldCheck, Sparkles } from 'lucide-react';
 import Logo from './Logo';
 
 const socialLinks = [
@@ -25,55 +25,57 @@ const socialLinks = [
 
 const Footer: React.FC = () => {
   return (
-    <>
-      <footer className="bg-transparent py-12 lg:py-16 border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-8 items-center">
-            {/* Logo & Tagline */}
-            <div className="text-center md:text-left">
-              <div className="flex items-center gap-3 justify-center md:justify-start mb-3">
-                <Logo size={28} />
-                <span className="text-xl font-bold text-text-primary">Nexora</span>
+    <footer className="bg-transparent py-12 lg:py-16 border-t border-white/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="premium-surface rounded-3xl p-6 lg:p-8 mb-8">
+          <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <p className="eyebrow-label text-interactive-cyan text-xs mb-3">Serious platform energy</p>
+              <h2 className="text-2xl lg:text-3xl font-bold text-text-primary">Built for players who want proof of progress.</h2>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="flex items-center gap-3 rounded-2xl bg-secondary-layer/60 px-4 py-3 text-sm text-text-secondary">
+                <ShieldCheck size={18} className="text-success-emerald" /> Wallet-connected identity
               </div>
-              <p className="text-text-secondary text-sm">
-                Challenge Your Mind. Climb the Ranks.
-              </p>
-            </div>
-
-            {/* Copyright */}
-            <div className="text-center">
-              <p className="text-text-secondary text-sm">
-                © 2025 Nexora. All rights reserved.
-              </p>
-            </div>
-
-            {/* Social Links */}
-            <div className="flex items-center justify-center md:justify-end gap-4">
-              {socialLinks.map((link, index) => (
-                <a
-                  key={index}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="premium-badge flex items-center gap-2 px-4 py-2 rounded-xl text-text-secondary hover:text-text-primary hover:border-brand-purple/40 transition-all duration-200 group"
-                >
-                  {link.icon}
-                  <span className="text-sm font-medium">{link.name}</span>
-                  <ExternalLink size={14} className="opacity-50 group-hover:opacity-100" />
-                </a>
-              ))}
+              <div className="flex items-center gap-3 rounded-2xl bg-secondary-layer/60 px-4 py-3 text-sm text-text-secondary">
+                <Sparkles size={18} className="text-gold" /> AI challenge generation
+              </div>
             </div>
           </div>
         </div>
-      </footer>
 
-      {/* Bottom Credit */}
-      <div className="text-center mt-8">
-        <p className="text-text-secondary text-xs">
-          Built by Meti pax
-        </p>
+        <div className="grid md:grid-cols-3 gap-8 items-center">
+          <div className="text-center md:text-left">
+            <div className="flex items-center gap-3 justify-center md:justify-start mb-3">
+              <Logo size={28} />
+              <span className="font-heading text-xl font-bold text-text-primary">Nexora</span>
+            </div>
+            <p className="text-text-secondary text-sm">Turn knowledge into rank.</p>
+          </div>
+
+          <div className="text-center">
+            <p className="text-text-secondary text-sm">© 2026 Nexora. All rights reserved.</p>
+            <p className="text-text-secondary/70 text-xs mt-1">Built by Meti pax</p>
+          </div>
+
+          <div className="flex items-center justify-center md:justify-end gap-4">
+            {socialLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="premium-badge flex items-center gap-2 px-4 py-2 rounded-xl text-text-secondary hover:text-text-primary hover:border-brand-purple/40 transition-all duration-200 group"
+              >
+                {link.icon}
+                <span className="text-sm font-medium">{link.name}</span>
+                <ExternalLink size={14} className="opacity-50 group-hover:opacity-100" />
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
-    </>
+    </footer>
   );
 };
 
