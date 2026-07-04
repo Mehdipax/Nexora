@@ -63,7 +63,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const [walletAddress, setWalletAddress] = useState('');
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(false);
   const { showToast } = useToast();
-  const { assignDefaultIfMissing } = useAvatar();
+  const { hydrateAvatarForWallet } = useAvatar();
   const {
     loadFromDBState,
     loadStateForWallet,
@@ -101,8 +101,12 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         };
         loadStateForWallet(address);
         loadFromDBState(merged);
+        hydrateAvatarForWallet(address, dbUser.avatar_id);
+      } else {
+        hydrateAvatarForWallet(address);
       }
     } catch {
+      hydrateAvatarForWallet(address);
       console.warn('[DB] Supabase unavailable, using local data');
     }
   };
@@ -132,7 +136,6 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       localStorage.setItem('nexora_wallet', address.toLowerCase());
       loadStateForWallet(address);
       unlockAchievement('first_login');
-      assignDefaultIfMissing(address);
       await loadSupabaseState(address);
       const chainId = (await window.ethereum.request({ method: 'eth_chainId' })) as string;
       setIsCorrectNetwork(chainId === RITUAL_CHAIN_ID);

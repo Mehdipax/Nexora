@@ -3,6 +3,7 @@ import { Crown, Medal, Award, Star, Trophy, Sparkles, UserRound, Timer } from 'l
 import { useWallet } from '../context/WalletContext';
 import { useGame, RANK_COLORS } from '../context/GameContext';
 import { getLeaderboardDB, getUserPositionDB } from '../lib/database';
+import { avatarUrl, getDefaultAvatarIdForWallet } from '../lib/avatars';
 import Sidebar from '../components/Sidebar';
 import { Skeleton } from '../components/ui/ProductUI';
 
@@ -12,21 +13,22 @@ interface LBRow {
   level: number;
   rank: string;
   premium_status: boolean;
+  avatar_id?: string | null;
 }
 
 type LeaderboardTab = 'daily' | 'weekly' | 'alltime';
 
 const MOCK: LBRow[] = [
-  { wallet_address: '0xA3f2000000000000000000000000000000B891', total_xp: 4250, level: 42, rank: 'Gold', premium_status: true },
-  { wallet_address: '0x7B2c0000000000000000000000000000000D445', total_xp: 3890, level: 38, rank: 'Gold', premium_status: false },
-  { wallet_address: '0x9E1d0000000000000000000000000000000A223', total_xp: 3100, level: 31, rank: 'Silver', premium_status: true },
-  { wallet_address: '0xF4a10000000000000000000000000000000C667', total_xp: 2540, level: 25, rank: 'Silver', premium_status: false },
-  { wallet_address: '0x2D8b0000000000000000000000000000000E112', total_xp: 2100, level: 21, rank: 'Silver', premium_status: true },
-  { wallet_address: '0x6C3e00000000000000000000000000000009934', total_xp: 1780, level: 17, rank: 'Bronze', premium_status: false },
-  { wallet_address: '0xB1f70000000000000000000000000000007723', total_xp: 1420, level: 14, rank: 'Bronze', premium_status: false },
-  { wallet_address: '0x3A9d0000000000000000000000000000005581', total_xp: 980, level: 9, rank: 'Bronze', premium_status: false },
-  { wallet_address: '0xE5c20000000000000000000000000000001199', total_xp: 650, level: 6, rank: 'Beginner', premium_status: false },
-  { wallet_address: '0x8D4f0000000000000000000000000000008845', total_xp: 320, level: 3, rank: 'Beginner', premium_status: false },
+  { wallet_address: '0xA3f2000000000000000000000000000000B891', total_xp: 4250, level: 42, rank: 'Gold', premium_status: true, avatar_id: 'nova-hoodie' },
+  { wallet_address: '0x7B2c0000000000000000000000000000000D445', total_xp: 3890, level: 38, rank: 'Gold', premium_status: false, avatar_id: 'kai-headphones' },
+  { wallet_address: '0x9E1d0000000000000000000000000000000A223', total_xp: 3100, level: 31, rank: 'Silver', premium_status: true, avatar_id: 'amina-hijab' },
+  { wallet_address: '0xF4a10000000000000000000000000000000C667', total_xp: 2540, level: 25, rank: 'Silver', premium_status: false, avatar_id: 'luna-glasses' },
+  { wallet_address: '0x2D8b0000000000000000000000000000000E112', total_xp: 2100, level: 21, rank: 'Silver', premium_status: true, avatar_id: 'ren-techwear' },
+  { wallet_address: '0x6C3e00000000000000000000000000000009934', total_xp: 1780, level: 17, rank: 'Bronze', premium_status: false, avatar_id: 'maya-bucket' },
+  { wallet_address: '0xB1f70000000000000000000000000000007723', total_xp: 1420, level: 14, rank: 'Bronze', premium_status: false, avatar_id: 'amir-mask' },
+  { wallet_address: '0x3A9d0000000000000000000000000000005581', total_xp: 980, level: 9, rank: 'Bronze', premium_status: false, avatar_id: 'nina-headset' },
+  { wallet_address: '0xE5c20000000000000000000000000000001199', total_xp: 650, level: 6, rank: 'Beginner', premium_status: false, avatar_id: 'hana-buns' },
+  { wallet_address: '0x8D4f0000000000000000000000000000008845', total_xp: 320, level: 3, rank: 'Beginner', premium_status: false, avatar_id: 'rio-fade' },
 ];
 
 const tabs: Array<{ id: LeaderboardTab; label: string; hint: string }> = [
@@ -45,8 +47,8 @@ function shortAddr(a: string) {
   return a.length > 10 ? `${a.slice(0, 6)}...${a.slice(-4)}` : a;
 }
 
-function initials(address: string) {
-  return shortAddr(address).slice(2, 4).toUpperCase();
+function rowAvatar(row: LBRow) {
+  return avatarUrl(row.avatar_id ?? getDefaultAvatarIdForWallet(row.wallet_address));
 }
 
 const Leaderboard: React.FC = () => {
@@ -61,7 +63,7 @@ const Leaderboard: React.FC = () => {
     setLoading(true);
     try {
       const dbTab = tab === 'daily' ? 'weekly' : tab;
-      const rows = (await getLeaderboardDB(dbTab)) as LBRow[];
+      const rows = (await getLeaderboardDB(dbTab)) as unknown as LBRow[];
       setData(rows.length > 0 ? rows : MOCK);
       if (isConnected && walletAddress) {
         const pos = await getUserPositionDB(walletAddress);
@@ -130,9 +132,11 @@ const Leaderboard: React.FC = () => {
                       <div className="absolute inset-0 opacity-60" style={{ background: `radial-gradient(circle at 50% 0%, ${meta.color}24, transparent 52%)` }} />
                       <div className="relative z-10">
                         <Icon size={meta.place === 1 ? 38 : 30} className="mx-auto mb-3" style={{ color: meta.color }} fill={meta.place === 1 ? 'currentColor' : 'none'} />
-                        <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-brand text-xl font-black text-white shadow-xl">
-                          {initials(row.wallet_address)}
-                        </div>
+                        <img
+                          src={rowAvatar(row)}
+                          alt="Player avatar"
+                          className="mx-auto mb-3 h-16 w-16 rounded-2xl border border-white/10 bg-secondary-layer object-cover shadow-xl"
+                        />
                         <p className="eyebrow-label text-xs" style={{ color: meta.color }}>#{meta.place} · {meta.label}</p>
                         <p className="mt-1 font-mono text-sm text-text-primary">{shortAddr(row.wallet_address)}</p>
                         <div className="mt-3 flex items-center justify-center gap-2">
@@ -164,7 +168,7 @@ const Leaderboard: React.FC = () => {
                       <div key={row.wallet_address} className={`grid grid-cols-[3rem_1fr_auto] items-center gap-3 px-4 py-3 transition-colors ${isMe ? 'bg-interactive-cyan/10' : 'hover:bg-white/[0.025]'}`}>
                         <span className={`text-lg font-black ${isMe ? 'text-interactive-cyan' : 'text-text-secondary'}`}>#{i + 4}</span>
                         <div className="flex min-w-0 items-center gap-3">
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary-layer font-black text-text-primary">{initials(row.wallet_address)}</div>
+                          <img src={rowAvatar(row)} alt="Player avatar" className="h-10 w-10 shrink-0 rounded-xl border border-white/10 bg-secondary-layer object-cover" />
                           <div className="min-w-0">
                             <div className="flex items-center gap-2">
                               <p className="truncate font-mono text-sm font-bold text-text-primary">{shortAddr(row.wallet_address)}</p>

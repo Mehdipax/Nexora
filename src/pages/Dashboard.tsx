@@ -20,6 +20,8 @@ import {
 import Sidebar from '../components/Sidebar';
 import { useGame, type ChallengeRecord } from '../context/GameContext';
 import { useWallet } from '../context/WalletContext';
+import { useAvatar } from '../context/AvatarContext';
+import { avatarUrl } from '../lib/avatars';
 
 const RANK_COLORS: Record<string, string> = {
   Beginner: '#64748B',
@@ -94,6 +96,7 @@ function formatDate(ts: string | null) {
 const Dashboard: React.FC = () => {
   const { gameState } = useGame();
   const { walletAddress, isConnected, isConnecting, isCorrectNetwork } = useWallet();
+  const { avatarId } = useAvatar();
 
   const rankColor = RANK_COLORS[gameState.rank] || RANK_COLORS.Beginner;
   const nextStreakDay = gameState.streak < 5 ? gameState.streak + 1 : 5;
@@ -130,14 +133,17 @@ const Dashboard: React.FC = () => {
                   </span>
                 </div>
 
-                <div>
-                  <p className="text-sm text-text-secondary">Welcome back, commander</p>
-                  <h1 className="mt-2 text-3xl lg:text-5xl font-black text-text-primary">
-                    {isConnecting ? 'Syncing wallet...' : commanderName}
-                  </h1>
-                  <p className="mt-3 max-w-2xl text-text-secondary">
-                    You are Level {gameState.level} with {gameState.totalXP.toLocaleString()} XP. Push the daily action to move toward Level {gameState.level + 1} and protect your streak.
-                  </p>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                  <img src={avatarUrl(avatarId)} alt="Selected avatar" className="h-20 w-20 rounded-3xl border border-brand-purple/30 bg-secondary-layer object-cover shadow-purple-glow" />
+                  <div>
+                    <p className="text-sm text-text-secondary">Welcome back, commander</p>
+                    <h1 className="mt-2 text-3xl lg:text-5xl font-black text-text-primary">
+                      {isConnecting ? 'Syncing wallet...' : commanderName}
+                    </h1>
+                    <p className="mt-3 max-w-2xl text-text-secondary">
+                      You are Level {gameState.level} with {gameState.totalXP.toLocaleString()} XP. Push the daily action to move toward Level {gameState.level + 1} and protect your streak.
+                    </p>
+                  </div>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-3">

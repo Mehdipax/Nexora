@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { LogOut, Wallet } from 'lucide-react';
 import { useWallet } from '../context/WalletContext';
+import { useAvatar } from '../context/AvatarContext';
+import { avatarUrl } from '../lib/avatars';
 import { APP_NAV_ITEMS } from '../lib/navigation';
 import { cx } from '../lib/ui';
 
@@ -11,6 +13,7 @@ function shortAddr(address: string) {
 
 const Sidebar: React.FC = () => {
   const { walletAddress, disconnectWallet, isConnected } = useWallet();
+  const { avatarId } = useAvatar();
   const { pathname } = useLocation();
 
   return (
@@ -43,7 +46,11 @@ const Sidebar: React.FC = () => {
 
         <div className="m-3 rounded-2xl border border-white/5 bg-bg-primary/35 p-3">
           <div className="flex items-center gap-2 min-w-0">
-            <Wallet size={16} className={isConnected ? 'text-success-emerald' : 'text-text-secondary'} />
+            {isConnected ? (
+              <img src={avatarUrl(avatarId)} alt="Selected avatar" className="h-9 w-9 rounded-xl border border-brand-purple/25 bg-secondary-layer object-cover" />
+            ) : (
+              <Wallet size={16} className="text-text-secondary" />
+            )}
             <span className="truncate text-xs font-bold text-text-primary">{shortAddr(walletAddress)}</span>
           </div>
           {isConnected && (

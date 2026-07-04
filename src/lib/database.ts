@@ -14,6 +14,23 @@ interface TransactionRow {
   created_at: string;
 }
 
+export interface UserProfileRow {
+  wallet_address: string;
+  total_xp: number;
+  level: number;
+  rank: string;
+  rank_score: number;
+  streak: number;
+  last_active_date: string | null;
+  correct_answers: number;
+  total_challenges: number;
+  premium_status: boolean;
+  premium_purchased_at: string | null;
+  xp_booster_active: boolean;
+  xp_booster_expiry: string | null;
+  avatar_id?: string | null;
+}
+
 export async function ensureUser(addr: string) {
   try {
     await supabase.from('users').upsert(
@@ -25,16 +42,28 @@ export async function ensureUser(addr: string) {
   }
 }
 
-export async function loadUserFromDB(addr: string) {
+export async function loadUserFromDB(addr: string): Promise<UserProfileRow | null> {
   try {
     const { data } = await supabase
       .from('users')
       .select('*')
       .eq('wallet_address', normalizeAddress(addr))
       .single();
-    return data;
+    return data as UserProfileRow | null;
   } catch {
     return null;
+  }
+}
+
+
+export async function saveAvatarIdDB(addr: string, avatarId: string) {
+  try {
+    await supabase
+      .from('users')
+      .update({ avatar_id: avatarId, updated_at: new Date().toISOString() })
+      .eq('wallet_address', normalizeAddress(addr));
+  } catch (e) {
+    console.warn('[DB] saveAvatarId:', e);
   }
 }
 
@@ -143,10 +172,10 @@ export async function loadTransactionsDB(addr: string): Promise<Transaction[]> {
 }
 
 export async function getLeaderboardDB(type: 'weekly' | 'alltime') {
-  try {
+  const selectLeaderboard = async (columns: string) => {
     let query = supabase
       .from('users')
-      .select('wallet_address, total_xp, level, rank, premium_status')
+      .select(columns)
       .order('total_xp', { ascending: false })
       .limit(50);
 
@@ -156,8 +185,15 @@ export async function getLeaderboardDB(type: 'weekly' | 'alltime') {
       query = query.gte('updated_at', date.toISOString());
     }
 
-    const { data } = await query;
-    return data ?? [];
+    return query;
+  };
+
+  try {
+    const { data, error } = await selectLeaderboard('wallet_address, total_xp, level, rank, premium_status, avatar_id');
+    if (!error) return data ?? [];
+
+    const fallback = await selectLeaderboard('wallet_address, total_xp, level, rank, premium_status');
+    return fallback.data ?? [];
   } catch {
     return [];
   }
