@@ -49,6 +49,7 @@ interface WalletContextType {
   connectWallet: () => Promise<boolean>;
   disconnectWallet: () => void;
   switchToRitual: () => Promise<void>;
+  getRitualBalance: () => Promise<string>;
   purchaseItem: (
     price: string,
     itemType: 'xp_booster' | 'premium_pass'
@@ -201,6 +202,20 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     }
   };
 
+  const getRitualBalance = async (): Promise<string> => {
+    if (!window.ethereum || !walletAddress) return '0';
+
+    const { ethers } = await import('ethers');
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const balance = await provider.getBalance(walletAddress);
+      return ethers.formatEther(balance);
+    } catch (err) {
+      console.error('[Wallet] getRitualBalance failed:', err);
+      return '0';
+    }
+  };
+
   const purchaseItem = async (
     price: string,
     itemType: 'xp_booster' | 'premium_pass'
@@ -215,16 +230,34 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     }
 
     const { ethers } = await import('ethers');
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    const signer = await provider.getSigner();
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const signerAddress = await signer.getAddress();
 
-    const tx = await signer.sendTransaction({
-      to: FEE_RECIPIENT,
-      value: ethers.parseEther(price),
-    });
+      console.log('[Purchase] Signer address:', signerAddress);
+      console.log('[Purchase] Chain ID:', chainId);
+      console.log('[Purchase] Sending', price, 'RITUAL to', FEE_RECIPIENT);
 
-    await tx.wait();
-    return tx.hash;
+      const balance = await provider.getBalance(signerAddress);
+      console.log('[Purchase] Current balance (wei):', balance.toString());
+
+      const tx = await signer.sendTransaction({
+        to: FEE_RECIPIENT,
+        value: ethers.parseEther(price),
+      });
+
+      console.log('[Purchase] Transaction submitted:', tx.hash);
+      await tx.wait();
+      console.log('[Purchase] Transaction confirmed:', tx.hash);
+      return tx.hash;
+    } catch (err: unknown) {
+      console.error('[Purchase] Full error object:', err);
+      const purchaseError = err as { reason?: string; shortMessage?: string; message?: string };
+      const reason =
+        purchaseError?.reason || purchaseError?.shortMessage || purchaseError?.message || 'Unknown error';
+      throw new Error(`PURCHASE_FAILED: ${reason}`);
+    }
   };
 
   useEffect(() => {
@@ -289,6 +322,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         connectWallet,
         disconnectWallet,
         switchToRitual,
+        getRitualBalance,
         purchaseItem,
       }}
     >
