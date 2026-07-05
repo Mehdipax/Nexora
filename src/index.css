@@ -309,3 +309,68 @@ body,
     margin-top: 24px !important;
   }
 }
+
+/* Commercial SaaS polish pass: shared visual rhythm across every screen. */
+@layer base {
+  h1 { font-size: clamp(2rem, 4.8vw, 4.25rem); }
+  h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
+  h3 { font-size: clamp(1.125rem, 2vw, 1.375rem); }
+  small, .text-xs { line-height: 1.45; }
+  svg { flex-shrink: 0; }
+}
+
+@layer components {
+  .premium-surface,
+  .premium-surface-strong,
+  .bg-card {
+    border-radius: 1.5rem;
+  }
+
+  .premium-surface:hover,
+  .premium-surface-strong:hover,
+  .bg-card:hover {
+    transform: translate3d(0, -1px, 0);
+    box-shadow: 0 22px 56px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  }
+
+  .premium-button,
+  button.premium-button,
+  a.premium-button {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 1rem;
+    padding-inline: 1rem;
+    padding-block: 0.75rem;
+    font-size: 0.9375rem;
+  }
+
+  .premium-badge {
+    min-height: 1.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+  }
+
+  .nexora-icon-frame {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 1rem;
+  }
+
+  .nexora-avatar {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 1.25rem;
+  }
+
+  .nexora-row {
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(9, 7, 5, 0.28);
+    padding: 1rem;
+  }
+}

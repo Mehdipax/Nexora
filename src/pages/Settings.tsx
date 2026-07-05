@@ -55,7 +55,7 @@ const Settings: React.FC = () => {
   return (
     <>
     <AppShell maxWidth="3xl">
-          <section className="relative overflow-hidden rounded-[2rem] premium-surface-strong p-6 mb-6">
+          <section className="relative overflow-hidden rounded-3xl premium-surface-strong p-6 mb-6">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_0%,rgba(243,201,139,0.14),transparent_35%)]" />
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 rounded-full bg-interactive-cyan/10 border border-interactive-cyan/25 px-3 py-1 text-xs font-black text-interactive-cyan mb-3">
@@ -70,7 +70,7 @@ const Settings: React.FC = () => {
           <Surface className="mb-6">
             <h2 className="font-black text-xl text-text-primary mb-5 flex items-center gap-2"><Wallet className="text-brand-purple" /> Account & network</h2>
 
-            <div className="py-4 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center border-b border-secondary-layer">
+            <div className="py-3 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center border-b border-secondary-layer">
               <div>
                 <p className="text-text-primary font-medium text-sm">Connected Wallet</p>
                 <p className="text-text-secondary text-xs mt-0.5">Your Web3 identity</p>
@@ -90,7 +90,7 @@ const Settings: React.FC = () => {
               </div>
             </div>
 
-            <div className="py-4 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center border-b border-secondary-layer">
+            <div className="py-3 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center border-b border-secondary-layer">
               <div>
                 <p className="text-text-primary font-medium text-sm">Network</p>
                 <p className="text-text-secondary text-xs mt-0.5">Current blockchain network</p>
@@ -111,7 +111,7 @@ const Settings: React.FC = () => {
               )}
             </div>
 
-            <div className="py-4 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+            <div className="py-3 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
               <div>
                 <p className="text-danger font-medium text-sm">Disconnect Wallet</p>
                 <p className="text-text-secondary text-xs mt-0.5">Your progress will be saved</p>
@@ -202,7 +202,7 @@ const Settings: React.FC = () => {
           onClick={() => setShowDisconnect(false)}
         >
           <div
-            className="premium-surface-strong rounded-[2rem] p-5 sm:p-8 max-w-sm w-full text-center"
+            className="premium-surface-strong rounded-3xl p-5 sm:p-6 max-w-sm w-full text-center"
             style={{ border: '1px solid rgba(216,140,58,0.2)' }}
             onClick={(e) => e.stopPropagation()}
           >

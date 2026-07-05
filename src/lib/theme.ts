@@ -9,15 +9,15 @@ export const spacing = {
   page: 'px-4 sm:px-6 lg:px-8',
   section: 'py-12 lg:py-24',
   card: 'p-5 sm:p-6',
-  cardLg: 'p-6 lg:p-8',
+  cardLg: 'p-6 lg:p-6',
   stack: 'space-y-6',
 } as const;
 
 export const radius = {
   sm: 'rounded-xl',
   md: 'rounded-2xl',
-  lg: 'rounded-[1.5rem]',
-  xl: 'rounded-[2rem]',
+  lg: 'rounded-3xl',
+  xl: 'rounded-3xl',
   full: 'rounded-full',
 } as const;
 

@@ -314,14 +314,14 @@ const Challenge: React.FC = () => {
           <button
             key={category.id}
             onClick={() => handleCategorySelect(category)}
-            className="group relative overflow-hidden rounded-[1.75rem] premium-surface p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:border-brand-purple/50 focus-visible:scale-[1.01]"
+            className="group relative overflow-hidden rounded-[1.75rem] premium-surface p-6 text-left transition-all duration-300 hover:border-brand-purple/50 focus-visible:scale-[1.01]"
           >
             <div className={`absolute inset-0 bg-gradient-to-br ${category.gradient}`} />
             <div className="relative z-10 flex h-full min-h-[248px] flex-col justify-between gap-6">
               <div>
                 <div className="mb-5 flex items-start justify-between gap-3">
                   <div
-                    className="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-bg-primary/40 shadow-2xl transition-transform duration-300 group-hover:scale-110"
+                    className="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-bg-primary/40 shadow-2xl transition-transform duration-300 group-hover:scale-[1.03]"
                     style={{ boxShadow: `0 18px 50px ${category.iconColor}24` }}
                   >
                     <category.icon size={34} color={category.iconColor} />
@@ -365,7 +365,7 @@ const Challenge: React.FC = () => {
         <ArrowLeft size={18} /> Change mode
       </button>
 
-      <div className="overflow-hidden rounded-[2rem] premium-surface-strong p-5 lg:p-8">
+      <div className="overflow-hidden rounded-3xl premium-surface-strong p-5 lg:p-6">
         <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <div>
             <div className="mb-4 flex items-center gap-4">
@@ -430,10 +430,10 @@ const Challenge: React.FC = () => {
 
   const renderLoading = () => renderShell(
     <div className="flex min-h-[70vh] items-center justify-center">
-      <div className="relative w-full max-w-xl overflow-hidden rounded-[2rem] premium-surface-strong p-5 sm:p-8 text-center">
+      <div className="relative w-full max-w-xl overflow-hidden rounded-3xl premium-surface-strong p-5 sm:p-6 text-center">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(243,201,139,0.16),transparent_42%)]" />
         <div className="relative z-10">
-          <div className="mx-auto mb-4 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full border border-brand-purple/30 bg-brand-purple/10">
+          <div className="mx-auto mb-4 flex h-16 w-16 sm:h-16 sm:w-16 items-center justify-center rounded-full border border-brand-purple/30 bg-brand-purple/10">
             <Loader2 size={44} className="animate-spin text-interactive-cyan" />
           </div>
           <p className="eyebrow-label text-interactive-cyan text-xs">Gemini ritual in progress</p>
@@ -476,15 +476,15 @@ const Challenge: React.FC = () => {
           <div className="rounded-2xl border border-gold/25 bg-gold/10 px-3 py-3 font-black text-gold">+{selectedDifficultyXP} XP</div>
         </div>
 
-        <div className="overflow-hidden rounded-[2rem] premium-surface-strong">
+        <div className="overflow-hidden rounded-3xl premium-surface-strong">
           <div className="border-b border-white/5 p-5 sm:p-6">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="eyebrow-label text-interactive-cyan text-xs">Live question</p>
                 <h1 className="mt-2 text-2xl font-black text-text-primary">Answer before the signal closes</h1>
               </div>
-              <div className="relative mx-auto h-16 w-16 shrink-0 sm:h-20 sm:w-20 sm:mx-0">
-                <svg className="h-full w-full -rotate-90 transform">
+              <div className="relative mx-auto h-16 w-16 shrink-0 sm:h-16 sm:w-16 sm:mx-0">
+                <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 96 96">
                   <circle cx="48" cy="48" r="45" stroke="rgba(39,52,73,0.95)" strokeWidth="7" fill="none" />
                   <circle
                     cx="48"
@@ -538,7 +538,7 @@ const Challenge: React.FC = () => {
             <button
               onClick={handleSubmit}
               disabled={selectedAnswer === null || isSubmitting}
-              className={`mt-7 flex w-full items-center justify-center gap-2 rounded-2xl py-4 font-black text-white transition-all duration-200 ${
+              className={`mt-7 flex w-full items-center justify-center gap-2 rounded-2xl py-3 font-black text-white transition-all duration-200 ${
                 selectedAnswer === null
                   ? 'cursor-not-allowed bg-secondary-layer text-text-secondary'
                   : 'premium-button hover:scale-[1.01]'
@@ -560,9 +560,9 @@ const Challenge: React.FC = () => {
 
     return renderShell(
       <div className="flex min-h-[72vh] items-center justify-center">
-        <div className={`w-full max-w-3xl overflow-hidden rounded-[2rem] premium-surface-strong ${isCorrect ? 'border-success-emerald/30' : 'border-danger/25'}`}>
+        <div className={`w-full max-w-3xl overflow-hidden rounded-3xl premium-surface-strong ${isCorrect ? 'border-success-emerald/30' : 'border-danger/25'}`}>
           <div className={`p-7 text-center sm:p-9 ${isCorrect ? 'bg-success-emerald/5' : 'bg-danger/5'}`}>
-            <div className={`mx-auto mb-4 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full ${isCorrect ? 'bg-success-emerald/15 text-success-emerald' : 'bg-danger/15 text-danger'}`}>
+            <div className={`mx-auto mb-4 flex h-16 w-16 sm:h-16 sm:w-16 items-center justify-center rounded-full ${isCorrect ? 'bg-success-emerald/15 text-success-emerald' : 'bg-danger/15 text-danger'}`}>
               {isCorrect ? <CheckCircle size={58} /> : <XCircle size={58} />}
             </div>
             <p className={`eyebrow-label text-xs ${isCorrect ? 'text-success-emerald' : 'text-danger'}`}>{isCorrect ? 'Ritual complete' : 'Ritual failed'}</p>
@@ -606,13 +606,13 @@ const Challenge: React.FC = () => {
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <button
                 onClick={handleNextChallenge}
-                className="flex flex-1 items-center justify-center gap-2 rounded-2xl premium-button py-4 font-black text-white transition-transform hover:scale-[1.01]"
+                className="flex flex-1 items-center justify-center gap-2 rounded-2xl premium-button py-3 font-black text-white transition-transform hover:scale-[1.01]"
               >
                 {isCorrect ? 'Continue ritual' : 'Try again'} <RotateCcw size={18} />
               </button>
               <button
                 onClick={handleGoToDashboard}
-                className="flex flex-1 items-center justify-center gap-2 rounded-2xl border border-white/10 py-4 font-black text-text-primary transition-colors hover:border-brand-purple/45 hover:bg-white/[0.03]"
+                className="flex flex-1 items-center justify-center gap-2 rounded-2xl border border-white/10 py-3 font-black text-text-primary transition-colors hover:border-brand-purple/45 hover:bg-white/[0.03]"
               >
                 Choose new mode <ArrowRight size={18} />
               </button>

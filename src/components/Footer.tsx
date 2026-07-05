@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-transparent py-12 lg:py-16 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="premium-surface rounded-3xl p-6 lg:p-8 mb-8">
+        <div className="premium-surface rounded-3xl p-6 lg:p-6 mb-8">
           <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
               <p className="eyebrow-label text-interactive-cyan text-xs mb-3">Serious platform energy</p>

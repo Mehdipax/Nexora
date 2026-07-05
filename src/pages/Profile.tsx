@@ -46,7 +46,7 @@ const Profile: React.FC = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
           {/* Header */}
-          <div className="relative overflow-hidden premium-surface-strong rounded-[2rem] p-5 lg:p-8">
+          <div className="relative overflow-hidden premium-surface-strong rounded-3xl p-5 lg:p-6">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_0%,rgba(216,140,58,0.18),transparent_32%),radial-gradient(circle_at_88%_12%,rgba(251,191,36,0.14),transparent_30%)]" />
             <div className="relative z-10 flex flex-col sm:flex-row items-start gap-6">
               <div className="flex flex-col items-center flex-shrink-0">
@@ -54,10 +54,10 @@ const Profile: React.FC = () => {
                   <img
                     src={avatarUrl(avatarId)}
                     alt="Avatar"
-                    className="w-20 h-20 rounded-3xl flex-shrink-0 bg-secondary-layer ring-2 ring-brand-purple/30"
+                    className="w-16 h-16 rounded-3xl flex-shrink-0 bg-secondary-layer ring-2 ring-brand-purple/30"
                   />
                 ) : (
-                  <div className="w-20 h-20 rounded-3xl bg-gradient-brand flex items-center justify-center text-white text-2xl font-black flex-shrink-0 ring-2 ring-brand-purple/30">
+                  <div className="w-16 h-16 rounded-3xl bg-gradient-brand flex items-center justify-center text-white text-2xl font-black flex-shrink-0 ring-2 ring-brand-purple/30">
                     0x
                   </div>
                 )}
@@ -114,7 +114,7 @@ const Profile: React.FC = () => {
           </div>
 
           {/* Progress */}
-          <div className="premium-surface rounded-[1.5rem] p-6">
+          <div className="premium-surface rounded-3xl p-6">
             <div className="flex justify-between mb-2">
               <span className="text-text-secondary text-sm">Progress to Next Level</span>
               <span className="text-gold text-sm font-semibold">{gameState.totalXP} / {(gameState.level + 1) * 100} XP</span>
@@ -144,7 +144,7 @@ const Profile: React.FC = () => {
           </div>
 
           {/* Streak */}
-          <div className="premium-surface rounded-[1.5rem] p-6">
+          <div className="premium-surface rounded-3xl p-6">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-2">
                 <Flame size={28} className="text-primary" />
@@ -157,7 +157,7 @@ const Profile: React.FC = () => {
           </div>
 
           {/* Achievements */}
-          <div className="premium-surface rounded-[1.5rem] p-6">
+          <div className="premium-surface rounded-3xl p-6">
             <div className="flex items-center justify-between mb-5"><h2 className="font-black text-2xl text-text-primary">Trophy Case</h2><Trophy className="text-gold" /></div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {ACHIEVEMENTS.map((ach) => {
@@ -180,13 +180,13 @@ const Profile: React.FC = () => {
           </div>
 
           {/* My Items */}
-          <div className="premium-surface rounded-[1.5rem] p-6">
+          <div className="premium-surface rounded-3xl p-6">
             <h2 className="font-black text-2xl text-text-primary mb-4">Inventory</h2>
             <InventoryList premiumStatus={gameState.premiumStatus} xpBoosterActive={gameState.xpBoosterActive} />
           </div>
 
           {/* Statistics */}
-          <div className="premium-surface rounded-[1.5rem] p-6">
+          <div className="premium-surface rounded-3xl p-6">
             <h2 className="font-black text-2xl text-text-primary mb-5">Performance Map</h2>
             <div className="grid grid-cols-3 gap-3 mb-5">
               <MetricCard label="Total" value={<span className="font-bold text-text-primary">{gameState.totalChallenges}</span>} />
@@ -211,7 +211,7 @@ const Profile: React.FC = () => {
           </div>
 
           {/* Transaction History */}
-          <div className="premium-surface rounded-[1.5rem] p-6">
+          <div className="premium-surface rounded-3xl p-6">
             <h2 className="font-black text-2xl text-text-primary mb-5">Ritual Ledger</h2>
             {gameState.transactions.length === 0 ? (
               <EmptyState icon={<Receipt size={40} />} message="No transactions yet." />

@@ -90,7 +90,7 @@ const Leaderboard: React.FC = () => {
       <Sidebar />
       <main className="lg:pl-60 px-4 product-page-enter">
         <div className="max-w-6xl mx-auto space-y-6">
-          <section className="relative overflow-hidden rounded-[2rem] premium-surface-strong p-5 lg:p-8">
+          <section className="relative overflow-hidden rounded-3xl premium-surface-strong p-5 lg:p-6">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_10%,rgba(251,191,36,0.18),transparent_28%),radial-gradient(circle_at_86%_15%,rgba(216,140,58,0.18),transparent_34%)]" />
             <div className="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div>
@@ -153,7 +153,7 @@ const Leaderboard: React.FC = () => {
               </section>
 
               <section className="premium-surface rounded-[1.75rem] overflow-hidden">
-                <div className="flex items-center justify-between border-b border-white/5 px-5 py-4">
+                <div className="flex items-center justify-between border-b border-white/5 px-5 py-3">
                   <div>
                     <h2 className="text-xl font-black text-text-primary">Contender ranks</h2>
                     <p className="text-xs text-text-secondary">Dense competitive view for the next challengers.</p>

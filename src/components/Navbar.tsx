@@ -89,7 +89,7 @@ const Navbar: React.FC = () => {
               </div>
 
               {/* Profile Avatar */}
-              <Link to="/profile" className="w-8 h-8 rounded-full bg-gradient-brand flex items-center justify-center hover:scale-105 transition-transform">
+              <Link to="/profile" className="w-8 h-8 rounded-full bg-gradient-brand flex items-center justify-center hover:scale-[1.01] transition-transform">
                 {avatarId ? (
                   <img
                     src={avatarUrl(avatarId)}
@@ -105,7 +105,7 @@ const Navbar: React.FC = () => {
             <button
               onClick={connectWallet}
               disabled={isConnecting}
-              className="premium-button flex items-center gap-2 px-3 py-2 lg:px-5 lg:py-2.5 text-white rounded-xl font-semibold transition-all duration-200 hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+              className="premium-button flex items-center gap-2 px-3 py-2 lg:px-5 lg:py-2 text-white rounded-xl font-semibold transition-all duration-200 hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
               {isConnecting ? (
                 <Loader2 size={18} className="animate-spin" />

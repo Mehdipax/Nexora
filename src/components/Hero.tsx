@@ -62,7 +62,7 @@ const Hero: React.FC = () => {
               <button
                 onClick={handleCTAClick}
                 disabled={isConnecting}
-                className="premium-button group relative inline-flex w-full sm:w-auto items-center justify-center gap-3 px-5 py-3 text-white rounded-2xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="premium-button group relative inline-flex w-full sm:w-auto items-center justify-center gap-3 px-5 py-3 text-white rounded-2xl transition-all duration-300 hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {isConnecting ? (
                   <Loader2 size={20} className="animate-spin" />
@@ -93,7 +93,7 @@ const Hero: React.FC = () => {
           </div>
 
           <div className="relative hidden lg:block">
-            <div className="premium-surface-strong rounded-[2rem] p-6 shadow-premium">
+            <div className="premium-surface-strong rounded-3xl p-6 shadow-premium">
               <div className="mb-6 flex items-center justify-between">
                 <div>
                   <p className="eyebrow-label text-text-secondary text-[11px]">Live Progress Loop</p>

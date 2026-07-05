@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { CheckCircle, XCircle, AlertCircle, Info, X, Trophy, Flame, Star } from 'lucide-react';

@@ -120,7 +120,7 @@ const Dashboard: React.FC = () => {
       <Sidebar />
       <main className="lg:pl-60 product-page-enter">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <section className="relative overflow-hidden rounded-[2rem] premium-surface-strong p-5 lg:p-8">
+          <section className="relative overflow-hidden rounded-3xl premium-surface-strong p-5 lg:p-6">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(243,201,139,0.18),transparent_30%),radial-gradient(circle_at_15%_15%,rgba(216,140,58,0.22),transparent_32%)]" />
             <div className="relative z-10 grid gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-stretch">
               <div className="space-y-6">
@@ -175,7 +175,7 @@ const Dashboard: React.FC = () => {
                     {gameState.xpToNextLevel} XP until Level {gameState.level + 1}. Recent movement: <span className="font-bold text-gold">+{recentXp} XP</span> from your latest runs.
                   </p>
                 </div>
-                <Link to="/challenge" className="premium-button rounded-2xl px-5 py-4 text-white font-black flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform">
+                <Link to="/challenge" className="premium-button rounded-2xl px-5 py-3 text-white font-black flex items-center justify-center gap-2 hover:scale-[1.01] transition-transform">
                   <Play size={18} fill="currentColor" /> Launch Daily Action
                 </Link>
               </div>
