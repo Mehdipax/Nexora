@@ -86,18 +86,18 @@ const Leaderboard: React.FC = () => {
   const rest = data.slice(3, 12);
 
   return (
-    <div className="min-h-screen bg-transparent pt-20 lg:pt-24 pb-28 lg:pb-10">
+    <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-28 lg:pb-10">
       <Sidebar />
       <main className="lg:pl-60 px-4 product-page-enter">
-        <div className="max-w-6xl mx-auto space-y-8">
-          <section className="relative overflow-hidden rounded-[2rem] premium-surface-strong p-6 lg:p-8">
+        <div className="max-w-6xl mx-auto space-y-6">
+          <section className="relative overflow-hidden rounded-[2rem] premium-surface-strong p-5 lg:p-8">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_10%,rgba(251,191,36,0.18),transparent_28%),radial-gradient(circle_at_86%_15%,rgba(216,140,58,0.18),transparent_34%)]" />
             <div className="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-gold/10 border border-gold/25 px-4 py-2 text-xs font-black text-gold mb-4">
                   <Trophy size={15} /> Prestige board
                 </div>
-                <h1 className="text-4xl lg:text-6xl font-black text-text-primary">Leaderboard</h1>
+                <h1 className="mobile-hero-title font-black text-text-primary">Leaderboard</h1>
                 <p className="mt-3 max-w-2xl text-text-secondary">A competitive hall of signal, streaks, and earned XP. Premium players glow, but rank is won by performance.</p>
               </div>
               <div className="grid grid-cols-3 rounded-2xl bg-bg-primary/35 p-1 border border-white/5">
@@ -135,7 +135,7 @@ const Leaderboard: React.FC = () => {
                         <img
                           src={rowAvatar(row)}
                           alt="Player avatar"
-                          className="mx-auto mb-3 h-16 w-16 rounded-2xl border border-white/10 bg-secondary-layer object-cover shadow-xl"
+                          className="mx-auto mb-3 h-14 w-14 rounded-2xl border border-white/10 bg-secondary-layer object-cover shadow-xl"
                         />
                         <p className="eyebrow-label text-xs" style={{ color: meta.color }}>#{meta.place} · {meta.label}</p>
                         <p className="mt-1 font-mono text-sm text-text-primary">{shortAddr(row.wallet_address)}</p>
@@ -143,7 +143,7 @@ const Leaderboard: React.FC = () => {
                           {row.premium_status && <span className="rounded-full bg-gold/15 px-2 py-1 text-[10px] font-black text-gold"><Star size={10} className="inline" fill="currentColor" /> Premium</span>}
                           {isMe && <span className="rounded-full bg-interactive-cyan/15 px-2 py-1 text-[10px] font-black text-interactive-cyan">You</span>}
                         </div>
-                        <p className="stat-number mt-4 text-4xl font-black" style={{ color: meta.color }}>{row.total_xp.toLocaleString()}</p>
+                        <p className="stat-number mt-4 text-3xl font-black" style={{ color: meta.color }}>{row.total_xp.toLocaleString()}</p>
                         <p className="text-xs text-text-secondary">XP · Level {row.level} · {row.rank}</p>
                         <div className={`mt-5 ${meta.height} rounded-t-3xl border-t-2`} style={{ borderColor: meta.color, background: `linear-gradient(180deg, ${meta.color}20, transparent)` }} />
                       </div>

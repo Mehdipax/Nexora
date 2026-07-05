@@ -116,11 +116,11 @@ const Dashboard: React.FC = () => {
   const commanderName = shortAddr(walletAddress);
 
   return (
-    <div className="min-h-screen bg-transparent pt-20 lg:pt-24 pb-20 lg:pb-8">
+    <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-28 lg:pb-8">
       <Sidebar />
       <main className="lg:pl-60 product-page-enter">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <section className="relative overflow-hidden rounded-[2rem] premium-surface-strong p-6 lg:p-8">
+          <section className="relative overflow-hidden rounded-[2rem] premium-surface-strong p-5 lg:p-8">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(243,201,139,0.18),transparent_30%),radial-gradient(circle_at_15%_15%,rgba(216,140,58,0.22),transparent_32%)]" />
             <div className="relative z-10 grid gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-stretch">
               <div className="space-y-6">
@@ -134,10 +134,10 @@ const Dashboard: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                  <img src={avatarUrl(avatarId)} alt="Selected avatar" className="h-20 w-20 rounded-3xl border border-brand-purple/30 bg-secondary-layer object-cover shadow-purple-glow" />
+                  <img src={avatarUrl(avatarId)} alt="Selected avatar" className="h-14 w-14 rounded-3xl border border-brand-purple/30 bg-secondary-layer object-cover shadow-purple-glow" />
                   <div>
                     <p className="text-sm text-text-secondary">Welcome back, commander</p>
-                    <h1 className="mt-2 text-3xl lg:text-5xl font-black text-text-primary">
+                    <h1 className="mt-2 mobile-hero-title font-black text-text-primary">
                       {isConnecting ? 'Syncing wallet...' : commanderName}
                     </h1>
                     <p className="mt-3 max-w-2xl text-text-secondary">
@@ -183,7 +183,7 @@ const Dashboard: React.FC = () => {
           </section>
 
           <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <div className="premium-surface-strong rounded-3xl p-6 border-brand-purple/30">
+            <div className="premium-surface-strong rounded-3xl p-5 border-brand-purple/30">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-5">
                 <div>
                   <p className="eyebrow-label text-interactive-cyan text-xs">Next action</p>
@@ -239,7 +239,7 @@ const Dashboard: React.FC = () => {
           <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="premium-surface rounded-2xl p-5">
               <p className="eyebrow-label text-text-secondary text-[11px] mb-3">Progress & growth</p>
-              <p className="stat-number text-4xl font-black text-brand-purple">{gameState.level}</p>
+              <p className="stat-number text-3xl font-black text-brand-purple">{gameState.level}</p>
               <p className="text-sm text-text-secondary mt-2">Level {gameState.level + 1} in {gameState.xpToNextLevel} XP</p>
             </div>
             <div className="premium-surface rounded-2xl p-5">
@@ -249,12 +249,12 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="premium-surface rounded-2xl p-5">
               <p className="eyebrow-label text-text-secondary text-[11px] mb-3">Accuracy</p>
-              <p className="stat-number text-4xl font-black text-success-emerald">{accuracyPercent}%</p>
+              <p className="stat-number text-3xl font-black text-success-emerald">{accuracyPercent}%</p>
               <p className="text-sm text-text-secondary mt-2">{gameState.correctAnswers}/{gameState.totalChallenges} correct</p>
             </div>
             <div className="rounded-2xl p-5 bg-gold/[0.03] border border-gold/30 shadow-gold-glow">
               <p className="eyebrow-label text-text-secondary text-[11px] mb-3">Total XP</p>
-              <p className="stat-number text-4xl font-black text-gold">⚡ {gameState.totalXP.toLocaleString()}</p>
+              <p className="stat-number text-3xl font-black text-gold">⚡ {gameState.totalXP.toLocaleString()}</p>
               <p className="text-sm text-text-secondary mt-2">Lifetime earned</p>
             </div>
           </section>

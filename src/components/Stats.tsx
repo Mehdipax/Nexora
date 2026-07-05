@@ -30,13 +30,13 @@ const progressCues = [
 
 const Stats: React.FC = () => {
   return (
-    <section className="relative py-16 lg:py-24 bg-transparent">
+    <section className="relative py-12 lg:py-24 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="neon-divider mb-12" />
+        <div className="neon-divider mb-8" />
         <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="eyebrow-label text-gold text-xs mb-3">Value at a glance</p>
-            <h2 className="text-3xl sm:text-4xl font-bold text-text-primary">
+            <h2 className="mobile-section-title font-bold text-text-primary">
               Every session moves a visible meter.
             </h2>
           </div>
@@ -49,12 +49,12 @@ const Stats: React.FC = () => {
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="premium-surface rounded-3xl p-6 text-left group hover:border-interactive-cyan/35 transition-all duration-300"
+              className="premium-surface rounded-3xl p-5 text-left group hover:border-interactive-cyan/35 transition-all duration-300"
             >
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl premium-badge mb-6 group-hover:bg-brand-purple/20 transition-colors duration-300">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl premium-badge mb-4 group-hover:bg-brand-purple/20 transition-colors duration-300">
                 <stat.icon size={24} className="text-brand-purple" />
               </div>
-              <div className="stat-number text-5xl lg:text-6xl font-black text-text-primary mb-3">
+              <div className="stat-number text-4xl lg:text-6xl font-black text-text-primary mb-3">
                 {stat.value}
               </div>
               <div className="text-lg font-semibold text-text-primary mb-2">

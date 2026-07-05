@@ -7,8 +7,8 @@ export const typography = {
 
 export const spacing = {
   page: 'px-4 sm:px-6 lg:px-8',
-  section: 'py-16 lg:py-24',
-  card: 'p-6',
+  section: 'py-12 lg:py-24',
+  card: 'p-5 sm:p-6',
   cardLg: 'p-6 lg:p-8',
   stack: 'space-y-6',
 } as const;

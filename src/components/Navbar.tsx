@@ -48,15 +48,15 @@ const Navbar: React.FC = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="flex items-center justify-between h-14 lg:h-[72px]">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
-            <Logo size={32} />
-            <span className="text-xl font-bold text-text-primary">Nexora</span>
+          <Link to="/" className="flex items-center gap-2">
+            <Logo size={28} />
+            <span className="text-lg font-bold text-text-primary">Nexora</span>
           </Link>
 
           {/* Nav Links - Center */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
@@ -74,27 +74,27 @@ const Navbar: React.FC = () => {
 
           {/* Right Section */}
           {isConnected ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               {/* XP Badge */}
-              <div className="premium-badge flex items-center gap-1.5 px-3 py-1.5 rounded-full">
-                <Zap size={16} className="text-gold" />
-                <span className="text-sm font-semibold text-gold">{formatXP(gameState.totalXP)} XP</span>
+              <div className="premium-badge flex items-center gap-1.5 px-2.5 py-1 rounded-full">
+                <Zap size={14} className="text-gold" />
+                <span className="text-xs font-semibold text-gold">{formatXP(gameState.totalXP)} XP</span>
               </div>
 
               {/* Wallet Address */}
-              <div className="hidden sm:flex premium-badge items-center px-3 py-1.5 rounded-full">
+              <div className="hidden sm:flex premium-badge items-center px-2.5 py-1 rounded-full">
                 <span className="text-sm font-medium text-text-primary">
                   {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
                 </span>
               </div>
 
               {/* Profile Avatar */}
-              <Link to="/profile" className="w-9 h-9 rounded-full bg-gradient-brand flex items-center justify-center hover:scale-105 transition-transform">
+              <Link to="/profile" className="w-8 h-8 rounded-full bg-gradient-brand flex items-center justify-center hover:scale-105 transition-transform">
                 {avatarId ? (
                   <img
                     src={avatarUrl(avatarId)}
                     alt="Avatar"
-                    className="w-9 h-9 rounded-full"
+                    className="w-8 h-8 rounded-full"
                   />
                 ) : (
                   <span className="text-sm font-bold text-white">0x</span>
@@ -105,7 +105,7 @@ const Navbar: React.FC = () => {
             <button
               onClick={connectWallet}
               disabled={isConnecting}
-              className="premium-button flex items-center gap-2 px-4 py-2 lg:px-5 lg:py-2.5 text-white rounded-xl font-semibold transition-all duration-200 hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+              className="premium-button flex items-center gap-2 px-3 py-2 lg:px-5 lg:py-2.5 text-white rounded-xl font-semibold transition-all duration-200 hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
               {isConnecting ? (
                 <Loader2 size={18} className="animate-spin" />

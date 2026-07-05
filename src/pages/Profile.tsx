@@ -40,13 +40,13 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-transparent pt-20 lg:pt-24 pb-20 lg:pb-8">
+    <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-28 lg:pb-8">
       <Sidebar />
       <main className="lg:pl-60 product-page-enter">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
           {/* Header */}
-          <div className="relative overflow-hidden premium-surface-strong rounded-[2rem] p-6 lg:p-8">
+          <div className="relative overflow-hidden premium-surface-strong rounded-[2rem] p-5 lg:p-8">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_0%,rgba(216,140,58,0.18),transparent_32%),radial-gradient(circle_at_88%_12%,rgba(251,191,36,0.14),transparent_30%)]" />
             <div className="relative z-10 flex flex-col sm:flex-row items-start gap-6">
               <div className="flex flex-col items-center flex-shrink-0">
@@ -54,10 +54,10 @@ const Profile: React.FC = () => {
                   <img
                     src={avatarUrl(avatarId)}
                     alt="Avatar"
-                    className="w-24 h-24 rounded-3xl flex-shrink-0 bg-secondary-layer ring-2 ring-brand-purple/30"
+                    className="w-20 h-20 rounded-3xl flex-shrink-0 bg-secondary-layer ring-2 ring-brand-purple/30"
                   />
                 ) : (
-                  <div className="w-24 h-24 rounded-3xl bg-gradient-brand flex items-center justify-center text-white text-2xl font-black flex-shrink-0 ring-2 ring-brand-purple/30">
+                  <div className="w-20 h-20 rounded-3xl bg-gradient-brand flex items-center justify-center text-white text-2xl font-black flex-shrink-0 ring-2 ring-brand-purple/30">
                     0x
                   </div>
                 )}
