@@ -5,6 +5,7 @@ import { ToastProvider } from './context/ToastContext';
 import { GameProvider } from './context/GameContext';
 import { AvatarProvider } from './context/AvatarContext';
 import GameNotifications from './components/ui/GameNotifications';
+import MotionDesignSystem from './components/ui/MotionDesignSystem';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Home from './pages/Home';
@@ -60,54 +61,58 @@ function GlobalCredit() {
 }
 
 function AppRoutes() {
+  const location = useLocation();
+
   return (
     <>
       <Navbar />
       <GlobalCredit />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/challenge"
-          element={
-            <ProtectedRoute>
-              <Challenge />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/shop"
-          element={
-            <ProtectedRoute>
-              <Shop />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/settings"
-          element={
-            <ProtectedRoute>
-              <Settings />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+      <div key={location.pathname} className="page-transition-frame">
+        <Routes location={location}>
+          <Route path="/" element={<Home />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/challenge"
+            element={
+              <ProtectedRoute>
+                <Challenge />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/shop"
+            element={
+              <ProtectedRoute>
+                <Shop />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </div>
     </>
   );
 }
@@ -118,10 +123,13 @@ function App() {
       <GameProvider>
         <AvatarProvider>
           <WalletProvider>
+            <MotionDesignSystem />
             <GameNotifications />
-            <BrowserRouter>
-              <AppRoutes />
-            </BrowserRouter>
+            <div className="app-content-layer">
+              <BrowserRouter>
+                <AppRoutes />
+              </BrowserRouter>
+            </div>
           </WalletProvider>
         </AvatarProvider>
       </GameProvider>
