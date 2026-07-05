@@ -4,23 +4,27 @@ export interface AvatarOption {
   src: string;
 }
 
+function dicebearUrl(seed: string): string {
+  return `https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(seed)}&backgroundColor=8B5CF6,38BDF8,1E293B&backgroundType=gradientLinear&radius=50`;
+}
+
 export const AVATAR_OPTIONS: AvatarOption[] = [
-  { id: 'nova-hoodie', label: 'Nova Hoodie', src: '/avatars/nova-hoodie.svg' },
-  { id: 'luna-glasses', label: 'Luna Glasses', src: '/avatars/luna-glasses.svg' },
-  { id: 'kai-headphones', label: 'Kai Headphones', src: '/avatars/kai-headphones.svg' },
-  { id: 'amina-hijab', label: 'Amina Hijab', src: '/avatars/amina-hijab.svg' },
-  { id: 'milo-coder', label: 'Milo Coder', src: '/avatars/milo-coder.svg' },
-  { id: 'zara-cap', label: 'Zara Cap', src: '/avatars/zara-cap.svg' },
-  { id: 'ren-techwear', label: 'Ren Techwear', src: '/avatars/ren-techwear.svg' },
-  { id: 'leo-shades', label: 'Leo Shades', src: '/avatars/leo-shades.svg' },
-  { id: 'orion-laptop', label: 'Orion Laptop', src: '/avatars/orion-laptop.svg' },
-  { id: 'nina-headset', label: 'Nina Headset', src: '/avatars/nina-headset.svg' },
-  { id: 'sol-jacket', label: 'Sol Jacket', src: '/avatars/sol-jacket.svg' },
-  { id: 'maya-bucket', label: 'Maya Bucket', src: '/avatars/maya-bucket.svg' },
-  { id: 'hana-buns', label: 'Hana Buns', src: '/avatars/hana-buns.svg' },
-  { id: 'amir-mask', label: 'Amir Mask', src: '/avatars/amir-mask.svg' },
-  { id: 'ivy-ponytail', label: 'Ivy Ponytail', src: '/avatars/ivy-ponytail.svg' },
-  { id: 'rio-fade', label: 'Rio Fade', src: '/avatars/rio-fade.svg' },
+  { id: 'nova-hoodie',    label: 'Nova Hoodie',    src: dicebearUrl('nova-hoodie-2026') },
+  { id: 'luna-glasses',   label: 'Luna Glasses',   src: dicebearUrl('luna-glasses-2026') },
+  { id: 'kai-headphones', label: 'Kai Headphones', src: dicebearUrl('kai-headphones-2026') },
+  { id: 'amina-hijab',    label: 'Amina Hijab',    src: dicebearUrl('amina-hijab-2026') },
+  { id: 'milo-coder',     label: 'Milo Coder',     src: dicebearUrl('milo-coder-2026') },
+  { id: 'zara-cap',       label: 'Zara Cap',       src: dicebearUrl('zara-cap-2026') },
+  { id: 'ren-techwear',   label: 'Ren Techwear',   src: dicebearUrl('ren-techwear-2026') },
+  { id: 'leo-shades',     label: 'Leo Shades',     src: dicebearUrl('leo-shades-2026') },
+  { id: 'orion-laptop',   label: 'Orion Laptop',   src: dicebearUrl('orion-laptop-2026') },
+  { id: 'nina-headset',   label: 'Nina Headset',   src: dicebearUrl('nina-headset-2026') },
+  { id: 'sol-jacket',     label: 'Sol Jacket',     src: dicebearUrl('sol-jacket-2026') },
+  { id: 'maya-bucket',    label: 'Maya Bucket',    src: dicebearUrl('maya-bucket-2026') },
+  { id: 'hana-buns',      label: 'Hana Buns',      src: dicebearUrl('hana-buns-2026') },
+  { id: 'amir-mask',      label: 'Amir Mask',      src: dicebearUrl('amir-mask-2026') },
+  { id: 'ivy-ponytail',   label: 'Ivy Ponytail',   src: dicebearUrl('ivy-ponytail-2026') },
+  { id: 'rio-fade',       label: 'Rio Fade',       src: dicebearUrl('rio-fade-2026') },
 ];
 
 const avatarIdSet = new Set(AVATAR_OPTIONS.map((avatar) => avatar.id));

@@ -170,7 +170,6 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: RITUAL_CHAIN_ID }],
       });
-      setIsCorrectNetwork(true);
     } catch (err: unknown) {
       if ((err as WalletError).code === 4902) {
         try {
@@ -178,13 +177,27 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             method: 'wallet_addEthereumChain',
             params: [RITUAL_NETWORK],
           });
-          setIsCorrectNetwork(true);
         } catch {
           showToast('error', 'Failed to add Ritual network.');
         }
       } else if ((err as WalletError).code !== 4001) {
         showToast('error', 'Failed to switch network.');
       }
+    }
+
+    // Always re-verify actual chain state after attempting the switch,
+    // since some mobile wallet browsers resolve the promise without
+    // actually completing the switch.
+    await new Promise((r) => setTimeout(r, 500));
+    const chainId = (await window.ethereum.request({ method: 'eth_chainId' })) as string;
+    const success = chainId === RITUAL_CHAIN_ID;
+    setIsCorrectNetwork(success);
+
+    if (!success) {
+      showToast(
+        'error',
+        'Network switch did not complete. Please open your wallet app and manually select the Ritual network, then return to this page.'
+      );
     }
   };
 
