@@ -455,6 +455,11 @@ const Shop: React.FC = () => {
                     <div className="mt-4 rounded-2xl border border-gold/25 bg-gold/10 p-4">
                       <p className="text-sm font-bold text-gold">{item.error}</p>
                       <button onClick={() => handleSwitchAndRetry(item.type)} className="mt-3 rounded-xl border border-interactive-cyan/40 px-4 py-2 text-sm font-bold text-interactive-cyan">Switch Network</button>
+                      <p className="mt-2 text-xs text-text-secondary">
+                        If nothing happens after tapping Switch Network, open MetaMask,
+                        manually select the Ritual network from your network list, then
+                        come back and tap the purchase button again.
+                      </p>
                     </div>
                   )}
                 </div>
