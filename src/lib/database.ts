@@ -21,7 +21,7 @@ export interface UserProfileRow {
   rank: string;
   rank_score: number;
   streak: number;
-  last_active_date: string | null;
+  last_active_date: string | number | null;
   correct_answers: number;
   total_challenges: number;
   premium_status: boolean;
@@ -77,7 +77,9 @@ export async function syncUserToDB(addr: string, gs: GameState) {
         rank: gs.rank,
         rank_score: gs.rankScore,
         streak: gs.streak,
-        last_active_date: gs.lastActiveDate,
+        last_active_date: gs.lastActiveDate
+          ? new Date(gs.lastActiveDate).toISOString()
+          : null,
         correct_answers: gs.correctAnswers,
         total_challenges: gs.totalChallenges,
         premium_status: gs.premiumStatus,

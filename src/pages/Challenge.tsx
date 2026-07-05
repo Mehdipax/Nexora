@@ -22,6 +22,7 @@ import Sidebar from '../components/Sidebar';
 import { generateQuestion, QuestionData } from '../lib/gemini';
 import { useGame } from '../context/GameContext';
 import type { CategoryType, DifficultyType } from '../context/GameContext';
+import { calculateStreak } from '../lib/streak';
 
 type ChallengeState = 'category' | 'difficulty' | 'loading' | 'question' | 'correct' | 'wrong';
 
@@ -155,9 +156,6 @@ function getDifficultyLabel(id: DifficultyType) {
   return difficulties.find((difficulty) => difficulty.id === id)?.name ?? id;
 }
 
-function todayKey() {
-  return new Date().toISOString().split('T')[0];
-}
 
 const Challenge: React.FC = () => {
   const [state, setState] = useState<ChallengeState>('category');
@@ -218,8 +216,9 @@ const Challenge: React.FC = () => {
       ? String.fromCharCode(65 + selectedAnswer) as 'A' | 'B' | 'C' | 'D'
       : null;
     const isCorrect = answerKey !== null && answerKey === currentQuestion.correct;
-    const shouldAwardStreak = isCorrect && gameState.lastActiveDate !== todayKey();
-    const nextStreakDay = shouldAwardStreak ? (gameState.streak % 5) + 1 : gameState.streak;
+    const streakPreview = calculateStreak(gameState.streak, gameState.lastActiveDate);
+    const shouldAwardStreak = isCorrect && streakPreview.shouldGrantReward;
+    const nextStreakDay = shouldAwardStreak ? streakPreview.streak : gameState.streak;
     const streakXP = shouldAwardStreak ? STREAK_BONUS[nextStreakDay] ?? 10 : 0;
 
     const xpEarned = awardXP(selectedCategory.id, selectedDifficulty.id, isCorrect);

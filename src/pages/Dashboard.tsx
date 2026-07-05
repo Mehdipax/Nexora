@@ -88,7 +88,7 @@ function timeAgo(ts: string): string {
   return 'just now';
 }
 
-function formatDate(ts: string | null) {
+function formatDate(ts: number | null) {
   if (!ts) return 'No check-in yet';
   return new Date(ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }
