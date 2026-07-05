@@ -88,7 +88,9 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
           rank: dbUser.rank as RankType,
           rankScore: dbUser.rank_score,
           streak: dbUser.streak,
-          lastActiveDate: dbUser.last_active_date,
+          lastActiveDate: dbUser.last_active_date
+            ? new Date(dbUser.last_active_date).getTime()
+            : null,
           correctAnswers: dbUser.correct_answers,
           totalChallenges: dbUser.total_challenges,
           premiumStatus: dbUser.premium_status,

@@ -13,6 +13,7 @@ import {
   saveTransactionDB,
   syncUserToDB,
 } from '../lib/database';
+import { calculateStreak, getToday, normalizeStreakTimestamp } from '../lib/streak';
 
 // ============== TYPES ==============
 
@@ -44,7 +45,7 @@ export interface GameState {
   rank: RankType;
   rankScore: number;
   streak: number;
-  lastActiveDate: string | null;
+  lastActiveDate: number | null;
   correctAnswers: number;
   totalChallenges: number;
   accuracy: number;
@@ -194,7 +195,11 @@ function loadFromStorage(walletAddr?: string): GameState {
     const raw = localStorage.getItem(key);
     if (raw) {
       const parsed = JSON.parse(raw);
-      return { ...INITIAL_STATE, ...parsed };
+      return {
+        ...INITIAL_STATE,
+        ...parsed,
+        lastActiveDate: normalizeStreakTimestamp(parsed.lastActiveDate),
+      };
     }
   } catch {
     // ignore
@@ -246,6 +251,9 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [gameState, setGameState] = useState<GameState>(() => loadFromStorage());
   const [walletAddr, setWalletAddr] = useState<string>('');
+  const tabIdRef = useRef(
+    globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`
+  );
   const currentWalletRef = useRef('');
   const syncTimer = useRef<ReturnType<typeof setTimeout>>();
   const [levelUpSignal, setLevelUpSignal] = useState<number | null>(null);
@@ -263,6 +271,27 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     saveToStorage(gameState, walletAddr || undefined);
   }, [gameState, walletAddr]);
+
+  // Keep multiple tabs aligned with the newest persisted state.
+  useEffect(() => {
+    const key = walletAddr ? `${STORAGE_KEY}_${walletAddr.toLowerCase()}` : STORAGE_KEY;
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key !== key || !event.newValue) return;
+      try {
+        const parsed = JSON.parse(event.newValue);
+        setGameState({
+          ...INITIAL_STATE,
+          ...parsed,
+          lastActiveDate: normalizeStreakTimestamp(parsed.lastActiveDate),
+        });
+      } catch {
+        // Ignore malformed cross-tab updates.
+      }
+    };
+
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, [walletAddr]);
 
   // Debounced Supabase sync on state change
   useEffect(() => {
@@ -382,36 +411,44 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 
   const checkStreak = useCallback(() => {
-    const today = new Date().toISOString().split('T')[0];
-    const last = gameState.lastActiveDate;
-    if (last === today) return;
+    const now = Date.now();
+    const today = getToday(now);
+    const lockKey = `${STORAGE_KEY}_streak_lock_${(currentWalletRef.current || 'local').toLowerCase()}_${today}`;
+    const owner = tabIdRef.current;
 
-    let newStreak = 1;
-    if (last) {
-      const yest = new Date();
-      yest.setDate(yest.getDate() - 1);
-      if (last === yest.toISOString().split('T')[0]) {
-        newStreak = (gameState.streak % 5) + 1;
-      }
+    try {
+      const existing = localStorage.getItem(lockKey);
+      if (existing && JSON.parse(existing).expiresAt > now) return;
+      localStorage.setItem(lockKey, JSON.stringify({ owner, expiresAt: now + 10_000 }));
+      const claimed = localStorage.getItem(lockKey);
+      if (!claimed || JSON.parse(claimed).owner !== owner) return;
+    } catch {
+      // Continue without a cross-tab lock if storage is unavailable.
     }
 
-    const bonusXP = STREAK_BONUS[newStreak] ?? 10;
     const prevLevel = gameState.level;
     const prevRank = gameState.rank;
 
     updateState(
-      (prev) => ({
-        ...prev,
-        streak: newStreak,
-        lastActiveDate: today,
-        totalXP: prev.totalXP + bonusXP,
-      }),
+      (prev) => {
+        const result = calculateStreak(prev.streak, prev.lastActiveDate, now);
+        if (!result.shouldGrantReward) return prev;
+
+        const bonusXP = STREAK_BONUS[result.streak] ?? 10;
+        setStreakBonusSignal({ day: result.streak, xp: bonusXP });
+
+        return {
+          ...prev,
+          streak: result.streak,
+          lastActiveDate: today,
+          totalXP: prev.totalXP + bonusXP,
+        };
+      },
       prevLevel,
       prevRank
     );
 
-    setStreakBonusSignal({ day: newStreak, xp: bonusXP });
-  }, [gameState, updateState]);
+  }, [gameState.level, gameState.rank, updateState]);
 
   const unlockAchievement = useCallback(
     (id: string) => {
@@ -492,7 +529,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const loadFromDBState = useCallback((partial: Partial<GameState>) => {
     setGameState((prev) => {
-      const merged = { ...prev, ...partial };
+      const merged = { ...prev, ...partial, lastActiveDate: normalizeStreakTimestamp(partial.lastActiveDate ?? prev.lastActiveDate) };
       const level = calcLevel(merged.totalXP);
       const levelProgress = calcLevelProgress(merged.totalXP);
       const xpToNextLevel = calcXPToNext(merged.totalXP);
