@@ -54,7 +54,7 @@ const Stats: React.FC = () => {
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl premium-badge mb-4 group-hover:bg-brand-purple/20 transition-colors duration-300">
                 <stat.icon size={24} className="text-brand-purple" />
               </div>
-              <div className="stat-number text-4xl lg:text-6xl font-black text-text-primary mb-3">
+              <div className="stat-number text-4xl lg:text-5xl font-black text-text-primary mb-3">
                 {stat.value}
               </div>
               <div className="text-lg font-semibold text-text-primary mb-2">

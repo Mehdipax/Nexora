@@ -43,7 +43,7 @@ const AvatarPickerModal: React.FC<AvatarPickerModalProps> = ({ avatarId, onClose
       <button
         type="button"
         onClick={onClose}
-        className="w-full mt-5 py-2.5 bg-secondary-layer text-text-primary rounded-xl text-sm font-medium"
+        className="w-full mt-5 py-2 bg-secondary-layer text-text-primary rounded-xl text-sm font-medium"
       >
         Cancel
       </button>

@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { useToast } from './ToastContext';
 import { useGame } from './GameContext';
 import { useAvatar } from './AvatarContext';
@@ -72,7 +73,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     unlockAchievement,
   } = useGame();
 
-  const loadSupabaseState = async (address: string) => {
+  const loadSupabaseState = useCallback(async (address: string) => {
     try {
       await ensureUser(address);
       const [dbUser, dbAchievements, dbTransactions] = await Promise.all([
@@ -112,9 +113,9 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       hydrateAvatarForWallet(address);
       console.warn('[DB] Supabase unavailable, using local data');
     }
-  };
+  }, [hydrateAvatarForWallet, loadFromDBState, loadStateForWallet]);
 
-  const connectWallet = async (): Promise<boolean> => {
+  const connectWallet = useCallback(async (): Promise<boolean> => {
     const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     if (!window.ethereum && isMobileDevice) {
@@ -153,17 +154,17 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     } finally {
       setIsConnecting(false);
     }
-  };
+  }, [loadStateForWallet, loadSupabaseState, showToast, unlockAchievement]);
 
-  const disconnectWallet = () => {
+  const disconnectWallet = useCallback(() => {
     setIsConnected(false);
     setWalletAddress('');
     setIsCorrectNetwork(false);
     localStorage.removeItem('nexora_wallet');
     resetGame();
-  };
+  }, [resetGame]);
 
-  const switchToRitual = async () => {
+  const switchToRitual = useCallback(async () => {
     if (!window.ethereum) {
       showToast('error', 'Please install MetaMask to continue');
       return;
@@ -202,9 +203,9 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         'Network switch did not complete. Please open your wallet app and manually select the Ritual network, then return to this page.'
       );
     }
-  };
+  }, [showToast]);
 
-  const getRitualBalance = async (): Promise<string> => {
+  const getRitualBalance = useCallback(async (): Promise<string> => {
     if (!window.ethereum || !walletAddress) return '0';
 
     const { ethers } = await import('ethers');
@@ -216,9 +217,9 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       console.error('[Wallet] getRitualBalance failed:', err);
       return '0';
     }
-  };
+  }, [walletAddress]);
 
-  const purchaseItem = async (
+  const purchaseItem = useCallback(async (
     price: string,
     itemType: 'xp_booster' | 'premium_pass'
   ): Promise<string> => {
@@ -260,7 +261,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         purchaseError?.reason || purchaseError?.shortMessage || purchaseError?.message || 'Unknown error';
       throw new Error(`PURCHASE_FAILED: ${reason}`);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (!window.ethereum) return;
@@ -312,7 +313,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       ethereum.removeListener('accountsChanged', handleAccountsChanged);
       ethereum.removeListener('chainChanged', handleChainChanged);
     };
-  }, []);
+  }, [disconnectWallet, loadStateForWallet, loadSupabaseState]);
 
   return (
     <WalletContext.Provider

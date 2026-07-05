@@ -62,12 +62,12 @@ const Features: React.FC = () => {
           {features.map((feature, index) => (
             <article
               key={feature.title}
-              className="group relative overflow-hidden p-5 lg:p-8 premium-surface rounded-3xl hover:border-brand-purple/45 transition-all duration-300 hover:-translate-y-1 hover:shadow-purple-glow"
+              className="group relative overflow-hidden p-5 lg:p-6 premium-surface rounded-3xl hover:border-brand-purple/45 transition-all duration-300 hover:shadow-purple-glow"
             >
               <div className="absolute -right-16 -top-16 h-36 w-36 rounded-full bg-brand-purple/10 blur-3xl group-hover:bg-interactive-cyan/10 transition-colors" />
               <div className="mb-5 flex items-center justify-between">
                 <div
-                  className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br shadow-premium ${feature.gradient} group-hover:scale-110 transition-transform duration-300`}
+                  className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br shadow-premium ${feature.gradient} group-hover:scale-[1.03] transition-transform duration-300`}
                 >
                   <feature.icon size={28} className="text-white" />
                 </div>
@@ -85,7 +85,7 @@ const Features: React.FC = () => {
 
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {promiseHighlights.map((highlight) => (
-            <div key={highlight} className="premium-badge rounded-2xl px-5 py-4 text-sm text-text-secondary">
+            <div key={highlight} className="premium-badge rounded-2xl px-5 py-3 text-sm text-text-secondary">
               <span className="text-gold">✦</span> {highlight}
             </div>
           ))}

@@ -57,7 +57,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="relative overflow-hidden premium-surface-strong rounded-[2rem] p-6 max-w-md w-full"
+        className="relative overflow-hidden premium-surface-strong rounded-3xl p-6 max-w-md w-full"
         onClick={(e) => e.stopPropagation()}
       >
         {loading ? (
@@ -67,7 +67,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
             <p className="text-text-secondary text-sm">Confirm the transaction in MetaMask</p>
           </div>
         ) : success ? (
-          <div className="text-center py-4">
+          <div className="text-center py-3">
             <div className="mb-4 animate-bounce">
               <Check size={64} className="text-success-emerald mx-auto" />
             </div>
@@ -94,7 +94,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
             </div>
           </div>
         ) : error ? (
-          <div className="text-center py-4">
+          <div className="text-center py-3">
             <div className="mb-4">
               <X size={64} className="text-danger mx-auto" />
             </div>
@@ -350,7 +350,7 @@ const Shop: React.FC = () => {
   if (!isConnected) {
     return (
       <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-28 lg:pb-8 flex items-center justify-center px-4">
-        <div className="bg-card rounded-2xl p-5 sm:p-8 lg:p-10 text-center max-w-md w-full" style={{ border: '1px solid rgba(216,140,58,0.2)' }}>
+        <div className="bg-card rounded-2xl p-5 sm:p-6 lg:p-6 text-center max-w-md w-full" style={{ border: '1px solid rgba(216,140,58,0.2)' }}>
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-purple/10 mb-6">
             <Wallet size={32} className="text-brand-purple" />
           </div>
@@ -407,7 +407,7 @@ const Shop: React.FC = () => {
       <Sidebar />
       <main className="lg:pl-60 product-page-enter">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <section className="relative overflow-hidden rounded-[2rem] premium-surface-strong p-5 lg:p-8">
+          <section className="relative overflow-hidden rounded-3xl premium-surface-strong p-5 lg:p-6">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_15%,rgba(251,191,36,0.18),transparent_30%),radial-gradient(circle_at_82%_5%,rgba(243,201,139,0.14),transparent_34%)]" />
             <div className="relative z-10 grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
               <div>
@@ -442,7 +442,7 @@ const Shop: React.FC = () => {
             {items.map((item) => {
               const Icon = item.icon;
               return (
-                <div key={item.type} className={`relative overflow-hidden rounded-[2rem] premium-surface p-5 border ${item.frame}`}>
+                <div key={item.type} className={`relative overflow-hidden rounded-3xl premium-surface p-5 border ${item.frame}`}>
                   <div className="absolute right-5 top-5 rounded-full bg-bg-primary/50 border border-white/10 px-3 py-1 text-[10px] font-black text-text-secondary">{item.rarity}</div>
                   <div className="flex items-start gap-4 pr-24">
                     <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-bg-primary/45" style={{ boxShadow: `0 18px 50px ${item.accent}30` }}>
@@ -473,11 +473,11 @@ const Shop: React.FC = () => {
 
                   <div className="mt-6">
                     {item.active ? (
-                      <button disabled className="w-full rounded-2xl bg-success-emerald py-4 font-black text-white">✓ {item.activeLabel}</button>
+                      <button disabled className="w-full rounded-2xl bg-success-emerald py-3 font-black text-white">✓ {item.activeLabel}</button>
                     ) : item.loading ? (
-                      <button disabled className="w-full rounded-2xl bg-brand-purple/60 py-4 font-black text-white flex items-center justify-center gap-2"><Loader2 size={18} className="animate-spin" /> Processing exchange</button>
+                      <button disabled className="w-full rounded-2xl bg-brand-purple/60 py-3 font-black text-white flex items-center justify-center gap-2"><Loader2 size={18} className="animate-spin" /> Processing exchange</button>
                     ) : (
-                      <button onClick={() => openConfirmModal(item.type)} className="w-full rounded-2xl premium-button py-4 font-black text-white transition-transform hover:scale-[1.01]">{item.cta} — {item.price} RITUAL</button>
+                      <button onClick={() => openConfirmModal(item.type)} className="w-full rounded-2xl premium-button py-3 font-black text-white transition-transform hover:scale-[1.01]">{item.cta} — {item.price} RITUAL</button>
                     )}
                   </div>
 
@@ -497,7 +497,7 @@ const Shop: React.FC = () => {
             })}
           </section>
 
-          <section className="rounded-[1.5rem] premium-surface p-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <section className="rounded-3xl premium-surface p-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               <Sparkles className="text-interactive-cyan" />
               <div>
