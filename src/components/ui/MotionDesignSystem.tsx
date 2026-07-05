@@ -26,7 +26,7 @@ function MotionDesignSystem() {
     const updateMouseGlow = () => {
       frame = 0;
       if (!mouseGlowRef.current) return;
-      mouseGlowRef.current.style.opacity = '0.075';
+      mouseGlowRef.current.style.opacity = '0.055';
       mouseGlowRef.current.style.transform = `translate3d(${lastX}px, ${lastY}px, 0) translate3d(-50%, -50%, 0)`;
     };
 

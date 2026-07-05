@@ -25,26 +25,26 @@ const socialLinks = [
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-transparent py-12 lg:py-16 border-t border-white/10">
+    <footer className="bg-transparent pt-8 pb-[max(2.25rem,env(safe-area-inset-bottom))] lg:pt-12 lg:pb-10 border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="premium-surface rounded-3xl p-6 lg:p-6 mb-8">
+        <div className="premium-surface rounded-3xl p-5 lg:p-6 mb-7">
           <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
               <p className="eyebrow-label text-interactive-cyan text-xs mb-3">Serious platform energy</p>
-              <h2 className="text-2xl lg:text-3xl font-bold text-text-primary">Built for players who want proof of progress.</h2>
+              <h2 className="text-2xl lg:text-3xl font-semibold text-text-primary">Built for players who want proof of progress.</h2>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="flex items-center gap-3 rounded-2xl bg-secondary-layer/60 px-4 py-3 text-sm text-text-secondary">
+              <div className="flex items-center gap-3 rounded-2xl bg-secondary-layer/45 px-4 py-3 text-sm text-text-secondary">
                 <ShieldCheck size={18} className="text-success-emerald" /> Wallet-connected identity
               </div>
-              <div className="flex items-center gap-3 rounded-2xl bg-secondary-layer/60 px-4 py-3 text-sm text-text-secondary">
+              <div className="flex items-center gap-3 rounded-2xl bg-secondary-layer/45 px-4 py-3 text-sm text-text-secondary">
                 <Sparkles size={18} className="text-gold" /> AI challenge generation
               </div>
             </div>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 items-center">
+        <div className="grid md:grid-cols-3 gap-7 items-center">
           <div className="text-center md:text-left">
             <div className="flex items-center gap-3 justify-center md:justify-start mb-3">
               <Logo size={28} />
@@ -55,7 +55,6 @@ const Footer: React.FC = () => {
 
           <div className="text-center">
             <p className="text-text-secondary text-sm">© 2026 Nexora. All rights reserved.</p>
-            <p className="text-text-secondary/70 text-xs mt-1">Built by Meti pax</p>
           </div>
 
           <div className="flex items-center justify-center md:justify-end gap-4">
@@ -73,6 +72,12 @@ const Footer: React.FC = () => {
               </a>
             ))}
           </div>
+        </div>
+
+        <div className="mt-7 border-t border-white/5 pt-4 text-center">
+          <p className="text-[11px] font-medium tracking-wide text-text-secondary/60">
+            Built by Meti pax
+          </p>
         </div>
       </div>
     </footer>

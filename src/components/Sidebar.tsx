@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <>
-      <aside className="hidden lg:flex flex-col fixed left-0 top-16 bottom-16 w-60 premium-surface border-r border-white/10 z-40">
+      <aside className="hidden lg:flex flex-col fixed left-0 top-[72px] bottom-0 w-60 border-r border-white/5 bg-bg-primary/70 backdrop-blur-xl z-40">
         <nav className="flex-1 py-5 px-3 space-y-1" aria-label="Primary navigation">
           {APP_NAV_ITEMS.map((item) => {
             const isActive = pathname === item.path;
@@ -29,14 +29,14 @@ const Sidebar: React.FC = () => {
                 to={item.path}
                 aria-current={isActive ? 'page' : undefined}
                 className={cx(
-                  'group interactive-lift focus-ring flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold',
+                  'group focus-ring flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm font-semibold transition-colors duration-200',
                   isActive
-                    ? 'bg-brand-purple/[0.14] text-text-primary shadow-purple-glow ring-1 ring-brand-purple/25'
+                    ? 'bg-brand-purple/[0.12] text-text-primary ring-1 ring-brand-purple/20'
                     : 'text-muted hover:bg-white/[0.04] hover:text-text-primary'
                 )}
               >
-                <span className={cx('flex h-9 w-9 items-center justify-center rounded-xl transition-colors', isActive ? 'bg-brand-purple/20 text-interactive-cyan' : 'bg-white/[0.025] text-text-secondary group-hover:text-interactive-cyan')}>
-                  <item.icon size={18} />
+                <span className={cx('flex h-8 w-8 items-center justify-center rounded-xl transition-colors', isActive ? 'bg-brand-purple/20 text-interactive-cyan' : 'bg-white/[0.025] text-text-secondary group-hover:text-interactive-cyan')}>
+                  <item.icon size={17} />
                 </span>
                 <span>{item.label}</span>
               </Link>
@@ -44,7 +44,7 @@ const Sidebar: React.FC = () => {
           })}
         </nav>
 
-        <div className="m-3 rounded-2xl border border-white/5 bg-bg-primary/35 p-3">
+        <div className="mx-3 mb-2 rounded-2xl border border-white/5 bg-bg-primary/35 p-3">
           <div className="flex items-center gap-2 min-w-0">
             {isConnected ? (
               <img src={avatarUrl(avatarId)} alt="Selected avatar" className="h-9 w-9 rounded-xl border border-brand-purple/25 bg-secondary-layer object-cover" />
@@ -63,32 +63,40 @@ const Sidebar: React.FC = () => {
             </button>
           )}
         </div>
+        <p className="px-3 pb-4 text-center text-[11px] font-medium tracking-wide text-text-secondary/55">
+          Built by Meti pax
+        </p>
       </aside>
 
-      <nav className="lg:hidden fixed bottom-3 left-3 right-3 z-50 h-[72px] rounded-t-[24px] rounded-b-[22px] border border-white/10 bg-bg-primary/72 shadow-premium backdrop-blur-xl pb-safe" aria-label="Mobile navigation">
-        <div className="grid h-full grid-cols-5 items-center gap-1 px-2 py-2">
-          {APP_NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.path;
+      <div className="lg:hidden fixed bottom-3 left-3 right-3 z-50 pb-safe">
+        <p className="mx-auto mb-2 w-fit rounded-full border border-white/5 bg-bg-primary/55 px-3 py-1 text-[10px] font-semibold tracking-wide text-text-secondary/65 backdrop-blur-md">
+          Built by Meti pax
+        </p>
+        <nav className="h-[68px] rounded-[24px] border border-white/10 bg-bg-primary/82 shadow-[0_16px_44px_rgba(0,0,0,0.34)] backdrop-blur-xl" aria-label="Mobile navigation">
+          <div className="grid h-full grid-cols-6 items-center gap-0.5 px-1.5 py-1.5">
+            {APP_NAV_ITEMS.map((item) => {
+              const isActive = pathname === item.path;
 
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                aria-current={isActive ? 'page' : undefined}
-                className={cx(
-                  'focus-ring flex h-14 min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-1 text-[11px] font-bold transition-all duration-200',
-                  isActive
-                    ? 'bg-gold/15 text-gold ring-1 ring-gold/30 shadow-gold-glow'
-                    : 'text-muted hover:bg-white/[0.04] hover:text-text-primary'
-                )}
-              >
-                <item.icon size={20} />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={cx(
+                    'focus-ring flex h-[56px] min-w-0 flex-col items-center justify-center gap-0.5 rounded-[18px] px-0.5 text-[9.5px] font-semibold leading-tight transition-all duration-200 sm:text-[10.5px]',
+                    isActive
+                      ? 'bg-gold/14 text-gold ring-1 ring-gold/25'
+                      : 'text-muted hover:bg-white/[0.04] hover:text-text-primary'
+                  )}
+                >
+                  <item.icon size={18} strokeWidth={isActive ? 2.6 : 2.2} />
+                  <span className="max-w-full truncate">{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      </div>
     </>
   );
 };

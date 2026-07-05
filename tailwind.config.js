@@ -28,10 +28,10 @@ const typography = {
 };
 
 const shadows = {
-  premium: '0 18px 50px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(255, 180, 90, 0.08)',
-  'purple-glow': '0 16px 40px rgba(0, 0, 0, 0.28)',
-  'cyan-glow': '0 16px 40px rgba(0, 0, 0, 0.28)',
-  'gold-glow': '0 16px 42px rgba(216, 140, 58, 0.10)',
+  premium: '0 14px 36px rgba(0, 0, 0, 0.24), 0 0 0 1px rgba(255, 180, 90, 0.06)',
+  'purple-glow': '0 12px 28px rgba(0, 0, 0, 0.22)',
+  'cyan-glow': '0 12px 28px rgba(0, 0, 0, 0.22)',
+  'gold-glow': '0 12px 30px rgba(216, 140, 58, 0.08)',
 };
 
 const backgrounds = {

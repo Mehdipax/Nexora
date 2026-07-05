@@ -187,10 +187,6 @@ const Settings: React.FC = () => {
                 Discord <ExternalLink size={12} />
               </a>
             </div>
-
-            <p className="text-center text-xs text-text-secondary opacity-60 mt-6 pt-4 border-t border-secondary-layer">
-              Built by Meti pax
-            </p>
           </Surface>
       </AppShell>
 

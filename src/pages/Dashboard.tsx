@@ -17,7 +17,6 @@ import {
   XCircle,
   Zap,
 } from 'lucide-react';
-import Sidebar from '../components/Sidebar';
 import { useGame, type ChallengeRecord } from '../context/GameContext';
 import { useWallet } from '../context/WalletContext';
 import { useAvatar } from '../context/AvatarContext';
@@ -116,8 +115,7 @@ const Dashboard: React.FC = () => {
   const commanderName = shortAddr(walletAddress);
 
   return (
-    <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-28 lg:pb-8">
-      <Sidebar />
+    <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-36 lg:pb-10">
       <main className="lg:pl-60 product-page-enter">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <section className="relative overflow-hidden rounded-3xl premium-surface-strong p-5 lg:p-6">

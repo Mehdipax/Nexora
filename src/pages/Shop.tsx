@@ -12,7 +12,6 @@ import {
   ShieldCheck,
   Sparkles,
 } from 'lucide-react';
-import Sidebar from '../components/Sidebar';
 import { useWallet } from '../context/WalletContext';
 import { useGame } from '../context/GameContext';
 import { useToast } from '../context/ToastContext';
@@ -349,7 +348,7 @@ const Shop: React.FC = () => {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-28 lg:pb-8 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-36 lg:pb-10 flex items-center justify-center px-4">
         <div className="bg-card rounded-2xl p-5 sm:p-6 lg:p-6 text-center max-w-md w-full" style={{ border: '1px solid rgba(216,140,58,0.2)' }}>
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-purple/10 mb-6">
             <Wallet size={32} className="text-brand-purple" />
@@ -403,8 +402,7 @@ const Shop: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-28 lg:pb-8">
-      <Sidebar />
+    <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-36 lg:pb-10">
       <main className="lg:pl-60 product-page-enter">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <section className="relative overflow-hidden rounded-3xl premium-surface-strong p-5 lg:p-6">
