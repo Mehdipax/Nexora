@@ -61,7 +61,7 @@ const Settings: React.FC = () => {
               <div className="inline-flex items-center gap-2 rounded-full bg-interactive-cyan/10 border border-interactive-cyan/25 px-3 py-1 text-xs font-black text-interactive-cyan mb-3">
                 <SlidersHorizontal size={13} /> Control panel
               </div>
-              <h1 className="font-heading text-4xl font-black text-text-primary tracking-[-0.03em]">Settings</h1>
+              <h1 className="font-heading text-3xl font-black text-text-primary tracking-[-0.03em]">Settings</h1>
               <p className="mt-2 text-text-secondary">Minimal controls for wallet safety, network readiness, and local preferences.</p>
             </div>
           </section>
@@ -202,7 +202,7 @@ const Settings: React.FC = () => {
           onClick={() => setShowDisconnect(false)}
         >
           <div
-            className="premium-surface-strong rounded-[2rem] p-8 max-w-sm w-full text-center"
+            className="premium-surface-strong rounded-[2rem] p-5 sm:p-8 max-w-sm w-full text-center"
             style={{ border: '1px solid rgba(216,140,58,0.2)' }}
             onClick={(e) => e.stopPropagation()}
           >

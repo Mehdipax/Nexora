@@ -32,7 +32,7 @@ const Sidebar: React.FC = () => {
                   'group interactive-lift focus-ring flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold',
                   isActive
                     ? 'bg-brand-purple/[0.14] text-text-primary shadow-purple-glow ring-1 ring-brand-purple/25'
-                    : 'text-text-secondary hover:bg-white/[0.04] hover:text-text-primary'
+                    : 'text-muted hover:bg-white/[0.04] hover:text-text-primary'
                 )}
               >
                 <span className={cx('flex h-9 w-9 items-center justify-center rounded-xl transition-colors', isActive ? 'bg-brand-purple/20 text-interactive-cyan' : 'bg-white/[0.025] text-text-secondary group-hover:text-interactive-cyan')}>
@@ -65,8 +65,8 @@ const Sidebar: React.FC = () => {
         </div>
       </aside>
 
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 premium-surface border-t border-white/10 z-50 pb-safe" aria-label="Mobile navigation">
-        <div className="flex items-stretch gap-1 overflow-x-auto px-2 py-2">
+      <nav className="lg:hidden fixed bottom-3 left-3 right-3 z-50 h-[72px] rounded-t-[24px] rounded-b-[22px] border border-white/10 bg-bg-primary/72 shadow-premium backdrop-blur-xl pb-safe" aria-label="Mobile navigation">
+        <div className="grid h-full grid-cols-5 items-center gap-1 px-2 py-2">
           {APP_NAV_ITEMS.map((item) => {
             const isActive = pathname === item.path;
 
@@ -76,10 +76,10 @@ const Sidebar: React.FC = () => {
                 to={item.path}
                 aria-current={isActive ? 'page' : undefined}
                 className={cx(
-                  'focus-ring flex min-w-[74px] flex-1 flex-col items-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-bold transition-all',
+                  'focus-ring flex h-14 min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-1 text-[11px] font-bold transition-all duration-200',
                   isActive
-                    ? 'bg-brand-purple/15 text-interactive-cyan ring-1 ring-brand-purple/25'
-                    : 'text-text-secondary hover:bg-white/[0.04] hover:text-text-primary'
+                    ? 'bg-gold/15 text-gold ring-1 ring-gold/30 shadow-gold-glow'
+                    : 'text-muted hover:bg-white/[0.04] hover:text-text-primary'
                 )}
               >
                 <item.icon size={20} />

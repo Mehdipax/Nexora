@@ -94,7 +94,7 @@ const GameNotifications: React.FC = () => {
         >
           <div className="pointer-events-none text-center">
             <h1
-              className="stat-number text-6xl font-black mb-3"
+              className="stat-number text-4xl sm:text-6xl font-black mb-3"
               style={{
                 background: 'linear-gradient(135deg, #D88C3A, #F3C98B)',
                 WebkitBackgroundClip: 'text',
@@ -105,7 +105,7 @@ const GameNotifications: React.FC = () => {
             </h1>
             <p className="text-text-secondary text-xl">You reached Level</p>
             <p
-              className="stat-number text-8xl font-black mt-2"
+              className="stat-number text-6xl sm:text-8xl font-black mt-2"
               style={{
                 background: 'linear-gradient(135deg, #D88C3A, #F3C98B)',
                 WebkitBackgroundClip: 'text',

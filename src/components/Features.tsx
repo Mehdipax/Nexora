@@ -35,13 +35,13 @@ const promiseHighlights = [
 
 const Features: React.FC = () => {
   return (
-    <section className="relative py-20 lg:py-28 bg-transparent overflow-hidden">
+    <section className="relative py-12 lg:py-24 bg-transparent overflow-hidden">
       <div className="absolute left-0 top-1/4 h-80 w-80 -translate-x-1/2 rounded-full bg-brand-purple/10 blur-3xl" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-14 grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
+        <div className="mb-8 grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
           <div>
             <p className="eyebrow-label text-brand-purple text-xs mb-4">Product promise</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-primary mb-4">
+            <h2 className="mobile-section-title font-bold text-text-primary mb-4">
               Built for the moment you decide to get sharper.
             </h2>
           </div>
@@ -62,10 +62,10 @@ const Features: React.FC = () => {
           {features.map((feature, index) => (
             <article
               key={feature.title}
-              className="group relative overflow-hidden p-6 lg:p-8 premium-surface rounded-3xl hover:border-brand-purple/45 transition-all duration-300 hover:-translate-y-1 hover:shadow-purple-glow"
+              className="group relative overflow-hidden p-5 lg:p-8 premium-surface rounded-3xl hover:border-brand-purple/45 transition-all duration-300 hover:-translate-y-1 hover:shadow-purple-glow"
             >
               <div className="absolute -right-16 -top-16 h-36 w-36 rounded-full bg-brand-purple/10 blur-3xl group-hover:bg-interactive-cyan/10 transition-colors" />
-              <div className="mb-8 flex items-center justify-between">
+              <div className="mb-5 flex items-center justify-between">
                 <div
                   className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br shadow-premium ${feature.gradient} group-hover:scale-110 transition-transform duration-300`}
                 >
@@ -75,7 +75,7 @@ const Features: React.FC = () => {
               </div>
 
               <p className="eyebrow-label text-[10px] text-interactive-cyan mb-3">{feature.eyebrow}</p>
-              <h3 className="text-xl lg:text-2xl font-bold text-text-primary mb-4">
+              <h3 className="mobile-card-title font-bold text-text-primary mb-4">
                 {feature.title}
               </h3>
               <p className="text-sm text-text-secondary leading-7">{feature.description}</p>

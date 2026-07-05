@@ -24,7 +24,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-gradient-hero pt-28 lg:pt-32">
+    <section className="relative min-h-[auto] overflow-hidden bg-gradient-hero pt-20 pb-12 lg:min-h-screen lg:pt-32 lg:pb-0">
       <div
         className="absolute inset-0 opacity-[0.045]"
         style={{
@@ -44,17 +44,17 @@ const Hero: React.FC = () => {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid min-h-[calc(100vh-8rem)] items-center gap-12 lg:grid-cols-[1.08fr_0.92fr]">
+        <div className="grid min-h-0 items-center gap-8 lg:min-h-[calc(100vh-8rem)] lg:gap-12 lg:grid-cols-[1.08fr_0.92fr]">
           <div className="text-center lg:text-left">
-            <div className="premium-badge mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm text-text-secondary">
+            <div className="premium-badge mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm text-text-secondary">
               <Zap size={15} className="text-gold" />
               <span>Competitive learning for Web3 natives</span>
             </div>
 
-            <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-extrabold text-text-primary mb-6 leading-[0.98] tracking-[-0.034em] ">
+            <h1 className="font-heading mobile-hero-title font-extrabold text-text-primary mb-4 leading-[1.05] tracking-[-0.034em] ">
               Turn knowledge into rank.
             </h1>
-            <p className="text-base sm:text-lg lg:text-xl text-text-secondary max-w-2xl mx-auto lg:mx-0 mb-9 leading-8">
+            <p className="text-base sm:text-lg lg:text-xl text-text-secondary max-w-2xl mx-auto lg:mx-0 mb-6 leading-7">
               Nexora Lite turns fast AI challenges into XP, streaks, and public momentum — all anchored to your wallet identity.
             </p>
 
@@ -62,7 +62,7 @@ const Hero: React.FC = () => {
               <button
                 onClick={handleCTAClick}
                 disabled={isConnecting}
-                className="premium-button group relative inline-flex w-full sm:w-auto items-center justify-center gap-3 px-7 py-4 text-white rounded-2xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="premium-button group relative inline-flex w-full sm:w-auto items-center justify-center gap-3 px-5 py-3 text-white rounded-2xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {isConnecting ? (
                   <Loader2 size={20} className="animate-spin" />
@@ -75,14 +75,14 @@ const Hero: React.FC = () => {
               </button>
               <Link
                 to="/leaderboard"
-                className="group inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl border border-white/[0.12] bg-white/[0.035] px-7 py-4 font-heading font-bold text-text-primary transition-all duration-300 hover:border-interactive-cyan/40 hover:bg-white/[0.06]"
+                className="group inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl border border-white/[0.12] bg-white/[0.035] px-5 py-3 font-heading font-bold text-text-primary transition-all duration-300 hover:border-interactive-cyan/40 hover:bg-white/[0.06]"
               >
                 View Leaderboard
                 <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
 
-            <div className="mt-10 grid gap-3 sm:grid-cols-3">
+            <div className="mt-8 grid gap-3 sm:grid-cols-3">
               {trustSignals.map((signal) => (
                 <div key={signal.label} className="premium-surface flex items-center justify-center lg:justify-start gap-2 rounded-2xl px-4 py-3 text-sm text-text-secondary">
                   <signal.icon size={16} className="text-interactive-cyan" />

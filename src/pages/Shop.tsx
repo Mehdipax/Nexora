@@ -349,8 +349,8 @@ const Shop: React.FC = () => {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-transparent pt-20 lg:pt-24 pb-20 lg:pb-8 flex items-center justify-center px-4">
-        <div className="bg-card rounded-2xl p-8 lg:p-10 text-center max-w-md w-full" style={{ border: '1px solid rgba(216,140,58,0.2)' }}>
+      <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-28 lg:pb-8 flex items-center justify-center px-4">
+        <div className="bg-card rounded-2xl p-5 sm:p-8 lg:p-10 text-center max-w-md w-full" style={{ border: '1px solid rgba(216,140,58,0.2)' }}>
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-purple/10 mb-6">
             <Wallet size={32} className="text-brand-purple" />
           </div>
@@ -403,18 +403,18 @@ const Shop: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-transparent pt-20 lg:pt-24 pb-20 lg:pb-8">
+    <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-28 lg:pb-8">
       <Sidebar />
       <main className="lg:pl-60 product-page-enter">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <section className="relative overflow-hidden rounded-[2rem] premium-surface-strong p-6 lg:p-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <section className="relative overflow-hidden rounded-[2rem] premium-surface-strong p-5 lg:p-8">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_15%,rgba(251,191,36,0.18),transparent_30%),radial-gradient(circle_at_82%_5%,rgba(243,201,139,0.14),transparent_34%)]" />
             <div className="relative z-10 grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-gold/10 border border-gold/25 px-4 py-2 text-xs font-black text-gold mb-4">
                   <Gem size={15} /> In-game economy
                 </div>
-                <h1 className="text-4xl lg:text-6xl font-black text-text-primary">Ritual Shop</h1>
+                <h1 className="mobile-hero-title font-black text-text-primary">Ritual Shop</h1>
                 {isConnected && isCorrectNetwork && (
                   <p className="mt-3 text-sm font-bold text-success-emerald">
                     Your balance:{' '}
@@ -442,10 +442,10 @@ const Shop: React.FC = () => {
             {items.map((item) => {
               const Icon = item.icon;
               return (
-                <div key={item.type} className={`relative overflow-hidden rounded-[2rem] premium-surface p-6 border ${item.frame}`}>
+                <div key={item.type} className={`relative overflow-hidden rounded-[2rem] premium-surface p-5 border ${item.frame}`}>
                   <div className="absolute right-5 top-5 rounded-full bg-bg-primary/50 border border-white/10 px-3 py-1 text-[10px] font-black text-text-secondary">{item.rarity}</div>
                   <div className="flex items-start gap-4 pr-24">
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-bg-primary/45" style={{ boxShadow: `0 18px 50px ${item.accent}30` }}>
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-bg-primary/45" style={{ boxShadow: `0 18px 50px ${item.accent}30` }}>
                       <Icon size={34} style={{ color: item.accent }} fill={item.type === 'premium_pass' ? 'currentColor' : 'none'} />
                     </div>
                     <div>
@@ -457,7 +457,7 @@ const Shop: React.FC = () => {
                   <div className="mt-6 grid grid-cols-[1fr_auto] items-end gap-4 rounded-2xl bg-bg-primary/35 border border-white/5 p-4">
                     <div>
                       <p className="eyebrow-label text-xs text-text-secondary">Price</p>
-                      <p className="stat-number mt-1 text-4xl font-black text-text-primary">{item.price}</p>
+                      <p className="stat-number mt-1 text-3xl font-black text-text-primary">{item.price}</p>
                     </div>
                     <p className="mb-1 rounded-full bg-gold/10 px-3 py-1 text-sm font-black text-gold">RITUAL</p>
                   </div>

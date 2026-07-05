@@ -296,12 +296,12 @@ const Challenge: React.FC = () => {
   );
 
   const renderCategorySelection = () => renderShell(
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="text-center max-w-3xl mx-auto">
         <div className="inline-flex items-center gap-2 rounded-full premium-badge px-4 py-2 text-xs font-black text-interactive-cyan mb-4">
           <Sparkles size={14} /> Core ritual
         </div>
-        <h1 className="text-4xl lg:text-6xl font-black text-text-primary">
+        <h1 className="mobile-hero-title font-black text-text-primary">
           Select your game mode
         </h1>
         <p className="mt-4 text-text-secondary text-base lg:text-lg">
@@ -317,11 +317,11 @@ const Challenge: React.FC = () => {
             className="group relative overflow-hidden rounded-[1.75rem] premium-surface p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:border-brand-purple/50 focus-visible:scale-[1.01]"
           >
             <div className={`absolute inset-0 bg-gradient-to-br ${category.gradient}`} />
-            <div className="relative z-10 flex h-full min-h-[320px] flex-col justify-between gap-8">
+            <div className="relative z-10 flex h-full min-h-[248px] flex-col justify-between gap-6">
               <div>
                 <div className="mb-5 flex items-start justify-between gap-3">
                   <div
-                    className="relative flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-bg-primary/40 shadow-2xl transition-transform duration-300 group-hover:scale-110"
+                    className="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-bg-primary/40 shadow-2xl transition-transform duration-300 group-hover:scale-110"
                     style={{ boxShadow: `0 18px 50px ${category.iconColor}24` }}
                   >
                     <category.icon size={34} color={category.iconColor} />
@@ -365,12 +365,12 @@ const Challenge: React.FC = () => {
         <ArrowLeft size={18} /> Change mode
       </button>
 
-      <div className="overflow-hidden rounded-[2rem] premium-surface-strong p-6 lg:p-8">
+      <div className="overflow-hidden rounded-[2rem] premium-surface-strong p-5 lg:p-8">
         <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <div>
             <div className="mb-4 flex items-center gap-4">
               <div
-                className="flex h-16 w-16 items-center justify-center rounded-2xl bg-bg-primary/40"
+                className="flex h-14 w-14 items-center justify-center rounded-2xl bg-bg-primary/40"
                 style={{ boxShadow: `0 18px 50px ${selectedCategory?.iconColor}28` }}
               >
                 {selectedCategory && <selectedCategory.icon size={34} color={selectedCategory.iconColor} />}
@@ -430,10 +430,10 @@ const Challenge: React.FC = () => {
 
   const renderLoading = () => renderShell(
     <div className="flex min-h-[70vh] items-center justify-center">
-      <div className="relative w-full max-w-xl overflow-hidden rounded-[2rem] premium-surface-strong p-8 text-center">
+      <div className="relative w-full max-w-xl overflow-hidden rounded-[2rem] premium-surface-strong p-5 sm:p-8 text-center">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(243,201,139,0.16),transparent_42%)]" />
         <div className="relative z-10">
-          <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-brand-purple/30 bg-brand-purple/10">
+          <div className="mx-auto mb-4 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full border border-brand-purple/30 bg-brand-purple/10">
             <Loader2 size={44} className="animate-spin text-interactive-cyan" />
           </div>
           <p className="eyebrow-label text-interactive-cyan text-xs">Gemini ritual in progress</p>
@@ -483,7 +483,7 @@ const Challenge: React.FC = () => {
                 <p className="eyebrow-label text-interactive-cyan text-xs">Live question</p>
                 <h1 className="mt-2 text-2xl font-black text-text-primary">Answer before the signal closes</h1>
               </div>
-              <div className="relative mx-auto h-24 w-24 shrink-0 sm:mx-0">
+              <div className="relative mx-auto h-16 w-16 shrink-0 sm:h-20 sm:w-20 sm:mx-0">
                 <svg className="h-full w-full -rotate-90 transform">
                   <circle cx="48" cy="48" r="45" stroke="rgba(39,52,73,0.95)" strokeWidth="7" fill="none" />
                   <circle
@@ -562,11 +562,11 @@ const Challenge: React.FC = () => {
       <div className="flex min-h-[72vh] items-center justify-center">
         <div className={`w-full max-w-3xl overflow-hidden rounded-[2rem] premium-surface-strong ${isCorrect ? 'border-success-emerald/30' : 'border-danger/25'}`}>
           <div className={`p-7 text-center sm:p-9 ${isCorrect ? 'bg-success-emerald/5' : 'bg-danger/5'}`}>
-            <div className={`mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-full ${isCorrect ? 'bg-success-emerald/15 text-success-emerald' : 'bg-danger/15 text-danger'}`}>
+            <div className={`mx-auto mb-4 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full ${isCorrect ? 'bg-success-emerald/15 text-success-emerald' : 'bg-danger/15 text-danger'}`}>
               {isCorrect ? <CheckCircle size={58} /> : <XCircle size={58} />}
             </div>
             <p className={`eyebrow-label text-xs ${isCorrect ? 'text-success-emerald' : 'text-danger'}`}>{isCorrect ? 'Ritual complete' : 'Ritual failed'}</p>
-            <h1 className="mt-2 text-4xl font-black text-text-primary">{isCorrect ? 'Correct signal' : 'Signal missed'}</h1>
+            <h1 className="mt-2 text-3xl font-black text-text-primary">{isCorrect ? 'Correct signal' : 'Signal missed'}</h1>
             <p className="mx-auto mt-3 max-w-xl text-text-secondary">
               {isCorrect ? 'Your profile gains momentum. Bank the XP, protect the streak, and keep climbing.' : 'No XP this round. Study the explanation and re-enter the ritual with sharper focus.'}
             </p>
