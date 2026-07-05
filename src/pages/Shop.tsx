@@ -171,7 +171,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 };
 
 const Shop: React.FC = () => {
-  const { isConnected, isCorrectNetwork, connectWallet, switchToRitual, purchaseItem } = useWallet();
+  const { isConnected, isCorrectNetwork, connectWallet, switchToRitual, purchaseItem, getRitualBalance } = useWallet();
   const { xpBoosterActive, xpBoosterExpiry, premiumStatus, setXPBooster, setPremium } = useGame();
   const { showToast } = useToast();
 
@@ -179,6 +179,7 @@ const Shop: React.FC = () => {
   const [loadingPremium, setLoadingPremium] = useState(false);
   const [boosterError, setBoosterError] = useState<string | null>(null);
   const [premiumError, setPremiumError] = useState<string | null>(null);
+  const [ritualBalance, setRitualBalance] = useState<string | null>(null);
 
   const [modalState, setModalState] = useState<{
     open: boolean;
@@ -190,6 +191,27 @@ const Shop: React.FC = () => {
   }>({ open: false, itemType: null, loading: false, success: false, error: null, txHash: null });
 
   const [countdown, setCountdown] = useState({ hours: 0, minutes: 0 });
+
+  useEffect(() => {
+    if (!isConnected || !isCorrectNetwork) {
+      setRitualBalance(null);
+      return;
+    }
+
+    let active = true;
+    const fetchBalance = async () => {
+      const bal = await getRitualBalance();
+      if (active) setRitualBalance(bal);
+    };
+
+    fetchBalance();
+    const interval = setInterval(fetchBalance, 10000);
+
+    return () => {
+      active = false;
+      clearInterval(interval);
+    };
+  }, [isConnected, isCorrectNetwork, getRitualBalance]);
 
   useEffect(() => {
     if (!xpBoosterExpiry) return;
@@ -248,7 +270,7 @@ const Shop: React.FC = () => {
       } else if (purchaseError.code === 4001 || purchaseError.message?.includes('user rejected')) {
         showToast('error', 'Transaction rejected by user.');
       } else {
-        showToast('error', 'Transaction failed. Please try again.');
+        showToast('error', purchaseError.message || 'Transaction failed. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -315,7 +337,7 @@ const Shop: React.FC = () => {
         itemType,
         loading: false,
         success: false,
-        error: purchaseError.code === 4001 ? 'Transaction rejected by user.' : 'Transaction failed. Please try again.',
+        error: purchaseError.code === 4001 ? 'Transaction rejected by user.' : purchaseError.message || 'Transaction failed. Please try again.',
         txHash: null,
       });
     }
@@ -393,6 +415,14 @@ const Shop: React.FC = () => {
                   <Gem size={15} /> In-game economy
                 </div>
                 <h1 className="text-4xl lg:text-6xl font-black text-text-primary">Ritual Shop</h1>
+                {isConnected && isCorrectNetwork && (
+                  <p className="mt-3 text-sm font-bold text-success-emerald">
+                    Your balance:{' '}
+                    {ritualBalance !== null
+                      ? `${parseFloat(ritualBalance).toFixed(4)} RITUAL`
+                      : 'Loading...'}
+                  </p>
+                )}
                 <p className="mt-3 max-w-2xl text-text-secondary">Exchange Ritual testnet value for boosts, permanence, and visible prestige inside Nexora.</p>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
