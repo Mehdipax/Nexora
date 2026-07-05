@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Copy, Check, Shield, Receipt, ExternalLink, Flame, Crown, Trophy, Sparkles, WalletCards } from 'lucide-react';
-import Sidebar from '../components/Sidebar';
 import { useGame, RANK_COLORS, ACHIEVEMENTS } from '../context/GameContext';
 import { useWallet } from '../context/WalletContext';
 import { useAvatar } from '../context/AvatarContext';
@@ -40,8 +39,7 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-28 lg:pb-8">
-      <Sidebar />
+    <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-36 lg:pb-10">
       <main className="lg:pl-60 product-page-enter">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 

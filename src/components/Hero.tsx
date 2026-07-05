@@ -24,9 +24,9 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-[auto] overflow-hidden bg-gradient-hero pt-20 pb-12 lg:min-h-screen lg:pt-32 lg:pb-0">
+    <section className="relative min-h-[auto] overflow-hidden bg-gradient-hero pt-24 pb-16 sm:pt-28 sm:pb-20 lg:min-h-screen lg:pt-32 lg:pb-0">
       <div
-        className="absolute inset-0 opacity-[0.045]"
+        className="absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage: `
             linear-gradient(rgba(216, 140, 58, 0.52) 1px, transparent 1px),
@@ -35,34 +35,34 @@ const Hero: React.FC = () => {
           backgroundSize: '56px 56px',
         }}
       />
-      <div className="absolute left-1/2 top-[52%] h-[38rem] w-[38rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-3xl" />
-      <div className="absolute -right-40 top-20 h-96 w-96 rounded-full bg-accent/5 blur-3xl" />
+      <div className="absolute left-1/2 top-[52%] h-[32rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.035] blur-3xl" />
+      <div className="absolute -right-40 top-20 h-80 w-80 rounded-full bg-accent/[0.035] blur-3xl" />
 
       {/* Oversized abstract identity watermark */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-35">
-        <Logo size={680} watermark className="blur-[1px]" />
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+        <Logo size={620} watermark />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid min-h-0 items-center gap-8 lg:min-h-[calc(100vh-8rem)] lg:gap-12 lg:grid-cols-[1.08fr_0.92fr]">
+        <div className="grid min-h-0 items-center gap-10 lg:min-h-[calc(100vh-8rem)] lg:gap-12 lg:grid-cols-[1.08fr_0.92fr]">
           <div className="text-center lg:text-left">
-            <div className="premium-badge mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm text-text-secondary">
+            <div className="premium-badge mb-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm text-text-secondary">
               <Zap size={15} className="text-gold" />
               <span>Competitive learning for Web3 natives</span>
             </div>
 
-            <h1 className="font-heading mobile-hero-title font-extrabold text-text-primary mb-4 leading-[1.05] tracking-[-0.034em] ">
+            <h1 className="font-heading mobile-hero-title font-extrabold text-text-primary mb-5 leading-[1.04] tracking-[-0.034em] ">
               Turn knowledge into rank.
             </h1>
-            <p className="text-base sm:text-lg lg:text-xl text-text-secondary max-w-2xl mx-auto lg:mx-0 mb-6 leading-7">
+            <p className="text-base sm:text-lg lg:text-xl text-text-secondary max-w-2xl mx-auto lg:mx-0 mb-8 leading-7">
               Nexora Lite turns fast AI challenges into XP, streaks, and public momentum — all anchored to your wallet identity.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
               <button
                 onClick={handleCTAClick}
                 disabled={isConnecting}
-                className="premium-button group relative inline-flex w-full sm:w-auto items-center justify-center gap-3 px-5 py-3 text-white rounded-2xl transition-all duration-300 hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="premium-button group relative inline-flex w-full sm:w-auto items-center justify-center gap-3 px-6 py-3.5 text-white rounded-2xl transition-all duration-300 hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {isConnecting ? (
                   <Loader2 size={20} className="animate-spin" />
@@ -75,16 +75,16 @@ const Hero: React.FC = () => {
               </button>
               <Link
                 to="/leaderboard"
-                className="group inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl border border-white/[0.12] bg-white/[0.035] px-5 py-3 font-heading font-bold text-text-primary transition-all duration-300 hover:border-interactive-cyan/40 hover:bg-white/[0.06]"
+                className="group inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl border border-white/[0.10] bg-white/[0.025] px-5 py-3 font-heading font-semibold text-text-secondary transition-all duration-300 hover:border-interactive-cyan/35 hover:bg-white/[0.05] hover:text-text-primary"
               >
                 View Leaderboard
                 <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            <div className="mt-9 grid gap-3 sm:grid-cols-3">
               {trustSignals.map((signal) => (
-                <div key={signal.label} className="premium-surface flex items-center justify-center lg:justify-start gap-2 rounded-2xl px-4 py-3 text-sm text-text-secondary">
+                <div key={signal.label} className="premium-surface flex items-center justify-center lg:justify-start gap-2 rounded-2xl px-4 py-2.5 text-sm text-text-secondary">
                   <signal.icon size={16} className="text-interactive-cyan" />
                   <span>{signal.label}</span>
                 </div>
@@ -93,8 +93,8 @@ const Hero: React.FC = () => {
           </div>
 
           <div className="relative hidden lg:block">
-            <div className="premium-surface-strong rounded-3xl p-6 shadow-premium">
-              <div className="mb-6 flex items-center justify-between">
+            <div className="premium-surface-strong rounded-3xl p-5 shadow-premium">
+              <div className="mb-5 flex items-center justify-between">
                 <div>
                   <p className="eyebrow-label text-text-secondary text-[11px]">Live Progress Loop</p>
                   <h2 className="mt-2 text-2xl font-bold text-text-primary">Challenge → XP → Rank</h2>
@@ -104,13 +104,13 @@ const Hero: React.FC = () => {
                 </div>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {[
                   { label: 'AI & Emerging Technology', value: '60 XP', color: 'text-brand-purple', width: '92%' },
                   { label: 'Daily streak reserve', value: '+150 XP', color: 'text-gold', width: '74%' },
                   { label: 'Leaderboard pressure', value: 'Top 10', color: 'text-interactive-cyan', width: '64%' },
                 ].map((row) => (
-                  <div key={row.label} className="rounded-2xl bg-secondary-layer/70 p-4">
+                  <div key={row.label} className="rounded-2xl bg-secondary-layer/55 p-3.5">
                     <div className="mb-3 flex items-center justify-between gap-4">
                       <span className="text-sm font-medium text-text-primary">{row.label}</span>
                       <span className={`font-numeric text-lg font-extrabold ${row.color}`}>{row.value}</span>
@@ -123,21 +123,21 @@ const Hero: React.FC = () => {
               </div>
 
               <div className="mt-5 grid grid-cols-3 gap-3 text-center">
-                <div className="rounded-2xl border border-brand-purple/15 bg-brand-purple/10 p-4">
+                <div className="rounded-2xl border border-brand-purple/12 bg-brand-purple/[0.07] p-3.5">
                   <p className="stat-number text-3xl font-black text-brand-purple">3</p>
                   <p className="mt-1 text-xs text-text-secondary">Modes</p>
                 </div>
-                <div className="rounded-2xl border border-gold/15 bg-gold/10 p-4">
+                <div className="rounded-2xl border border-gold/12 bg-gold/[0.07] p-3.5">
                   <p className="stat-number text-3xl font-black text-gold">5</p>
                   <p className="mt-1 text-xs text-text-secondary">Streak Days</p>
                 </div>
-                <div className="rounded-2xl border border-interactive-cyan/15 bg-interactive-cyan/10 p-4">
+                <div className="rounded-2xl border border-interactive-cyan/12 bg-interactive-cyan/[0.07] p-3.5">
                   <p className="stat-number text-3xl font-black text-interactive-cyan">∞</p>
                   <p className="mt-1 text-xs text-text-secondary">AI Runs</p>
                 </div>
               </div>
             </div>
-            <BarChart3 className="absolute -bottom-5 -right-5 text-interactive-cyan/30" size={120} />
+            <BarChart3 className="absolute -bottom-4 -right-4 text-interactive-cyan/20" size={104} />
           </div>
         </div>
       </div>

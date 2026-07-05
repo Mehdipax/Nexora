@@ -35,8 +35,8 @@ const promiseHighlights = [
 
 const Features: React.FC = () => {
   return (
-    <section className="relative py-12 lg:py-24 bg-transparent overflow-hidden">
-      <div className="absolute left-0 top-1/4 h-80 w-80 -translate-x-1/2 rounded-full bg-brand-purple/10 blur-3xl" />
+    <section className="relative py-12 lg:py-20 bg-transparent overflow-hidden">
+      <div className="absolute left-0 top-1/4 h-72 w-72 -translate-x-1/2 rounded-full bg-brand-purple/[0.055] blur-3xl" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8 grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
           <div>
@@ -45,7 +45,7 @@ const Features: React.FC = () => {
               Built for the moment you decide to get sharper.
             </h2>
           </div>
-          <div className="premium-surface rounded-3xl p-5 lg:p-6">
+          <div className="premium-surface rounded-3xl p-5">
             <div className="flex items-start gap-3">
               <Sparkles className="mt-1 text-gold" size={22} />
               <div>
@@ -58,27 +58,27 @@ const Features: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid md:grid-cols-3 gap-5 lg:gap-6">
           {features.map((feature, index) => (
             <article
               key={feature.title}
-              className="group relative overflow-hidden p-5 lg:p-6 premium-surface rounded-3xl hover:border-brand-purple/45 transition-all duration-300 hover:shadow-purple-glow"
+              className="group relative overflow-hidden p-5 premium-surface rounded-3xl hover:border-brand-purple/30 transition-all duration-200"
             >
-              <div className="absolute -right-16 -top-16 h-36 w-36 rounded-full bg-brand-purple/10 blur-3xl group-hover:bg-interactive-cyan/10 transition-colors" />
+              <div className="absolute -right-16 -top-16 h-32 w-32 rounded-full bg-brand-purple/[0.055] blur-3xl group-hover:bg-interactive-cyan/[0.06] transition-colors" />
               <div className="mb-5 flex items-center justify-between">
                 <div
-                  className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br shadow-premium ${feature.gradient} group-hover:scale-[1.03] transition-transform duration-300`}
+                  className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br ${feature.gradient} group-hover:scale-[1.02] transition-transform duration-200`}
                 >
-                  <feature.icon size={28} className="text-white" />
+                  <feature.icon size={24} className="text-white" />
                 </div>
                 <span className="font-numeric text-sm text-text-secondary/60">0{index + 1}</span>
               </div>
 
               <p className="eyebrow-label text-[10px] text-interactive-cyan mb-3">{feature.eyebrow}</p>
-              <h3 className="mobile-card-title font-bold text-text-primary mb-4">
+              <h3 className="mobile-card-title font-bold text-text-primary mb-3">
                 {feature.title}
               </h3>
-              <p className="text-sm text-text-secondary leading-7">{feature.description}</p>
+              <p className="text-sm text-text-secondary leading-6">{feature.description}</p>
             </article>
           ))}
         </div>

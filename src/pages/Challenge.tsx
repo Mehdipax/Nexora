@@ -18,7 +18,6 @@ import {
   Zap,
 } from 'lucide-react';
 import { BrainIcon, FootballIcon, CircuitIcon } from '../components/CategoryIcons';
-import Sidebar from '../components/Sidebar';
 import { generateQuestion, QuestionData } from '../lib/gemini';
 import { useGame } from '../context/GameContext';
 import type { CategoryType, DifficultyType } from '../context/GameContext';
@@ -625,8 +624,7 @@ const Challenge: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-transparent pt-20 lg:pt-24 pb-24 lg:pb-8">
-      <Sidebar />
+    <div className="min-h-screen bg-transparent pt-20 lg:pt-24 pb-36 lg:pb-10">
       <main className="lg:pl-60 product-page-enter">
         {state === 'category' && renderCategorySelection()}
         {state === 'difficulty' && renderDifficultySelection()}

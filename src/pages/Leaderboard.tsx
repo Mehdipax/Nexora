@@ -4,7 +4,6 @@ import { useWallet } from '../context/WalletContext';
 import { useGame, RANK_COLORS } from '../context/GameContext';
 import { getLeaderboardDB, getUserPositionDB } from '../lib/database';
 import { avatarUrl, getDefaultAvatarIdForWallet } from '../lib/avatars';
-import Sidebar from '../components/Sidebar';
 import { Skeleton } from '../components/ui/ProductUI';
 
 interface LBRow {
@@ -86,8 +85,7 @@ const Leaderboard: React.FC = () => {
   const rest = data.slice(3, 12);
 
   return (
-    <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-28 lg:pb-10">
-      <Sidebar />
+    <div className="min-h-screen bg-transparent pt-16 lg:pt-24 pb-36 lg:pb-10">
       <main className="lg:pl-60 px-4 product-page-enter">
         <div className="max-w-6xl mx-auto space-y-6">
           <section className="relative overflow-hidden rounded-3xl premium-surface-strong p-5 lg:p-6">
@@ -189,8 +187,8 @@ const Leaderboard: React.FC = () => {
         </div>
       </main>
 
-      <div className="fixed bottom-16 lg:bottom-0 left-0 w-full z-40 border-t border-brand-purple/30 bg-bg-primary/85 px-4 py-3 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-3 text-sm">
+      <div className="fixed bottom-28 left-3 right-3 z-40 rounded-2xl border border-white/10 bg-bg-primary/80 px-4 py-3 backdrop-blur-xl lg:bottom-0 lg:left-60 lg:right-0 lg:rounded-none lg:border-x-0 lg:border-b-0">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 text-xs sm:text-sm">
           {isConnected ? (
             <>
               <span className="flex items-center gap-2 text-text-secondary"><UserRound size={16} /> Your position <span className="text-interactive-cyan font-black">#{userPos || '—'}</span></span>
