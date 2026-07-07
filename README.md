@@ -27,10 +27,15 @@ Testnet payments.
 npm install
 npm run dev
 
-Required environment variables (see .env.example):
+## Required Environment Variables
 
-VITE_GEMINI_API_KEY
+Client-side (used by the browser, set with VITE_ prefix):
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
 
-VITE_SUPABASE_URL
+Server-side only (used by /api functions, never expose to the client, never prefix with VITE_):
+- `GEMINI_API_KEY` (optionally `GEMINI_API_KEY_2`, `GEMINI_API_KEY_3` as fallback keys)
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
 
-VITE_SUPABASE_ANON_KEY
+See .env.example for a template.
