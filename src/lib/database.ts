@@ -173,7 +173,7 @@ export async function loadTransactionsDB(addr: string): Promise<Transaction[]> {
   }
 }
 
-export async function getLeaderboardDB(type: 'weekly' | 'alltime') {
+export async function getLeaderboardDB(type: 'daily' | 'weekly' | 'alltime') {
   const selectLeaderboard = async (columns: string) => {
     let query = supabase
       .from('users')
@@ -181,7 +181,11 @@ export async function getLeaderboardDB(type: 'weekly' | 'alltime') {
       .order('total_xp', { ascending: false })
       .limit(50);
 
-    if (type === 'weekly') {
+    if (type === 'daily') {
+      const date = new Date();
+      date.setHours(date.getHours() - 24);
+      query = query.gte('updated_at', date.toISOString());
+    } else if (type === 'weekly') {
       const date = new Date();
       date.setDate(date.getDate() - 7);
       query = query.gte('updated_at', date.toISOString());
