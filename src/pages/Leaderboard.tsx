@@ -61,8 +61,7 @@ const Leaderboard: React.FC = () => {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const dbTab = tab === 'daily' ? 'weekly' : tab;
-      const rows = (await getLeaderboardDB(dbTab)) as unknown as LBRow[];
+      const rows = (await getLeaderboardDB(tab)) as unknown as LBRow[];
       setData(rows.length > 0 ? rows : MOCK);
       if (isConnected && walletAddress) {
         const pos = await getUserPositionDB(walletAddress);

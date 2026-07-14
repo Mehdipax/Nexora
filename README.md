@@ -26,6 +26,7 @@ Testnet payments.
 ```bash
 npm install
 npm run dev
+```
 
 ## Required Environment Variables
 

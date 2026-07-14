@@ -10,6 +10,11 @@ const GameNotifications: React.FC = () => {
     newAchievementSignal,
     streakBonusSignal,
     clearSignals,
+    clearLevelUpSignal,
+    clearRankUpSignal,
+    clearXpGainSignal,
+    clearAchievementSignal,
+    clearStreakBonusSignal,
   } = useGame();
   const { showToast } = useToast();
 
@@ -28,11 +33,11 @@ const GameNotifications: React.FC = () => {
       setShowLevelUp(true);
       const t = setTimeout(() => {
         setShowLevelUp(false);
-        clearSignals();
+        clearLevelUpSignal();
       }, 3000);
       return () => clearTimeout(t);
     }
-  }, [levelUpSignal, clearSignals]);
+  }, [levelUpSignal, clearLevelUpSignal]);
 
   // XP Float Effect
   useEffect(() => {
@@ -41,11 +46,11 @@ const GameNotifications: React.FC = () => {
       setShowXP(true);
       const t = setTimeout(() => {
         setShowXP(false);
-        clearSignals();
+        clearXpGainSignal();
       }, 1800);
       return () => clearTimeout(t);
     }
-  }, [xpGainSignal, clearSignals]);
+  }, [xpGainSignal, clearXpGainSignal]);
 
   // Achievement Toast Effect
   useEffect(() => {
@@ -56,9 +61,9 @@ const GameNotifications: React.FC = () => {
           label: `${ach.icon} ${ach.name}`,
         });
       }
-      clearSignals();
+      clearAchievementSignal();
     }
-  }, [newAchievementSignal, showToast, clearSignals]);
+  }, [newAchievementSignal, showToast, clearAchievementSignal]);
 
   // Streak Bonus Toast Effect
   useEffect(() => {
@@ -66,9 +71,9 @@ const GameNotifications: React.FC = () => {
       showToast('streak', `Day ${streakBonusSignal.day} Streak!`, {
         label: `+${streakBonusSignal.xp} XP Bonus`,
       });
-      clearSignals();
+      clearStreakBonusSignal();
     }
-  }, [streakBonusSignal, showToast, clearSignals]);
+  }, [streakBonusSignal, showToast, clearStreakBonusSignal]);
 
   // Rank Up Toast Effect
   useEffect(() => {
@@ -76,9 +81,9 @@ const GameNotifications: React.FC = () => {
       showToast('rank', 'Rank Up!', {
         label: `You are now ${rankUpSignal}`,
       });
-      clearSignals();
+      clearRankUpSignal();
     }
-  }, [rankUpSignal, showToast, clearSignals]);
+  }, [rankUpSignal, showToast, clearRankUpSignal]);
 
   return (
     <>

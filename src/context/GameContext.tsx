@@ -218,6 +218,11 @@ interface GameContextType {
   newAchievementSignal: string | null;
   streakBonusSignal: { day: number; xp: number } | null;
   clearSignals: () => void;
+  clearLevelUpSignal: () => void;
+  clearRankUpSignal: () => void;
+  clearXpGainSignal: () => void;
+  clearAchievementSignal: () => void;
+  clearStreakBonusSignal: () => void;
   xpBoosterActive: boolean;
   xpBoosterExpiry: number | null;
   premiumStatus: boolean;
@@ -525,6 +530,12 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setStreakBonusSignal(null);
   }, []);
 
+  const clearLevelUpSignal = useCallback(() => setLevelUpSignal(null), []);
+  const clearRankUpSignal = useCallback(() => setRankUpSignal(null), []);
+  const clearXpGainSignal = useCallback(() => setXpGainSignal(null), []);
+  const clearAchievementSignal = useCallback(() => setNewAchievementSignal(null), []);
+  const clearStreakBonusSignal = useCallback(() => setStreakBonusSignal(null), []);
+
   return (
     <GameContext.Provider
       value={{
@@ -543,6 +554,11 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         newAchievementSignal,
         streakBonusSignal,
         clearSignals,
+        clearLevelUpSignal,
+        clearRankUpSignal,
+        clearXpGainSignal,
+        clearAchievementSignal,
+        clearStreakBonusSignal,
         xpBoosterActive: gameState.xpBoosterActive,
         xpBoosterExpiry: gameState.xpBoosterExpiry,
         premiumStatus: gameState.premiumStatus,
