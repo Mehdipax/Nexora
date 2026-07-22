@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
+  AlertTriangle,
   ArrowLeft,
   ArrowRight,
   Brain,
@@ -23,7 +24,7 @@ import { useGame } from '../context/GameContext';
 import { useWallet } from '../context/WalletContext';
 import type { CategoryType, DifficultyType } from '../context/GameContext';
 
-type ChallengeState = 'category' | 'difficulty' | 'loading' | 'question' | 'correct' | 'wrong';
+type ChallengeState = 'category' | 'difficulty' | 'loading' | 'question' | 'correct' | 'wrong' | 'submit-error';
 
 interface Category {
   id: CategoryType;
@@ -231,6 +232,7 @@ const Challenge: React.FC = () => {
     } catch (err: any) {
       setIsSubmitting(false);
       setAiError(err.message || 'Failed to submit answer. Please try again.');
+      setState('submit-error');
     }
   }, [
     applyServerResult,
@@ -542,6 +544,49 @@ const Challenge: React.FC = () => {
     );
   };
 
+
+  const renderSubmitError = () => renderShell(
+    <div className="flex min-h-[72vh] items-center justify-center">
+      <div className="w-full max-w-3xl overflow-hidden rounded-3xl premium-surface-strong border-danger/25">
+        <div className="p-7 text-center sm:p-9 bg-danger/5">
+          <div className="mx-auto mb-4 flex h-16 w-16 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-danger/15 text-danger">
+            <AlertTriangle size={58} />
+          </div>
+          <p className="eyebrow-label text-xs text-danger">Submission interrupted</p>
+          <h1 className="mt-2 text-3xl font-black text-text-primary">Signal Lost</h1>
+          <p className="mx-auto mt-3 max-w-xl text-text-secondary">
+            {aiError || 'Failed to submit answer. Please try again.'}
+          </p>
+        </div>
+
+        <div className="px-5 py-6 sm:px-6">
+          <div className="rounded-2xl border border-white/5 bg-secondary-layer/70 p-5 text-center">
+            <p className="text-sm leading-relaxed text-text-secondary">
+              The answer could not be resolved, so this round was paused instead of retrying in the background.
+            </p>
+          </div>
+
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+            <button
+              onClick={handleNextChallenge}
+              disabled={!selectedDifficulty}
+              className="flex flex-1 items-center justify-center gap-2 rounded-2xl premium-button py-3 font-black text-white transition-transform hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
+            >
+              Try Again <RotateCcw size={18} />
+            </button>
+            <button
+              onClick={handleGoToDashboard}
+              className="flex flex-1 items-center justify-center gap-2 rounded-2xl border border-white/10 py-3 font-black text-text-primary transition-colors hover:border-brand-purple/45 hover:bg-white/[0.03]"
+            >
+              Choose Different Category <ArrowRight size={18} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>,
+    'max-w-4xl'
+  );
+
   const renderResult = (isCorrect: boolean) => {
     const correctAnswerLetter = serverResult?.correctAnswer;
     const correctAnswer = currentQuestion && correctAnswerLetter ? currentQuestion.options[correctAnswerLetter] : '';
@@ -621,6 +666,7 @@ const Challenge: React.FC = () => {
         {state === 'difficulty' && renderDifficultySelection()}
         {state === 'loading' && renderLoading()}
         {state === 'question' && renderQuestion()}
+        {state === 'submit-error' && renderSubmitError()}
         {state === 'correct' && renderResult(true)}
         {state === 'wrong' && renderResult(false)}
       </main>
