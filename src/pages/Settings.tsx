@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Copy, Check, AlertTriangle, ExternalLink, Wallet, Wifi, SlidersHorizontal, ShieldCheck } from 'lucide-react';
 import AppShell from '../components/ui/AppShell';
 import Surface from '../components/ui/Surface';
@@ -191,7 +192,7 @@ const Settings: React.FC = () => {
       </AppShell>
 
       {/* Disconnect Modal */}
-      {showDisconnect && (
+      {showDisconnect && createPortal(
         <div
           className="fixed inset-0 z-[90] flex items-center justify-center p-4"
           style={{ backgroundColor: 'rgba(9,7,5,0.9)', backdropFilter: 'blur(4px)' }}
@@ -222,7 +223,8 @@ const Settings: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

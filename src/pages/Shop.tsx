@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Zap,
   Check,
@@ -49,7 +50,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   error,
   txHash,
 }) => {
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-[90] flex items-center justify-center p-4"
       style={{ backgroundColor: 'rgba(9,7,5,0.9)', backdropFilter: 'blur(4px)' }}
@@ -165,7 +166,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           </>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
