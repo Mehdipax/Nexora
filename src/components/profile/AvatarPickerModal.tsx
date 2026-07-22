@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { AVATAR_OPTIONS, avatarUrl } from '../../lib/avatars';
 
 interface AvatarPickerModalProps {
@@ -7,8 +8,9 @@ interface AvatarPickerModalProps {
   onSelect: (avatarId: string) => void;
 }
 
-const AvatarPickerModal: React.FC<AvatarPickerModalProps> = ({ avatarId, onClose, onSelect }) => (
-  <div
+const AvatarPickerModal: React.FC<AvatarPickerModalProps> = ({ avatarId, onClose, onSelect }) =>
+  createPortal(
+    <div
     className="fixed inset-0 z-[90] flex items-center justify-center p-4"
     style={{ backgroundColor: 'rgba(9,7,5,0.9)', backdropFilter: 'blur(4px)' }}
     onClick={onClose}
@@ -48,7 +50,8 @@ const AvatarPickerModal: React.FC<AvatarPickerModalProps> = ({ avatarId, onClose
         Cancel
       </button>
     </div>
-  </div>
-);
+    </div>,
+    document.body
+  );
 
 export default AvatarPickerModal;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useGame, ACHIEVEMENTS } from '../../context/GameContext';
 import { useToast } from '../../context/ToastContext';
 
@@ -87,7 +88,7 @@ const GameNotifications: React.FC = () => {
   return (
     <>
       {/* Level Up Overlay */}
-      {showLevelUp && levelNum !== null && (
+      {showLevelUp && levelNum !== null && createPortal(
         <div
           className="fixed inset-0 z-[200] flex items-center justify-center"
           style={{ backgroundColor: 'rgba(9,7,5,0.95)', backdropFilter: 'blur(4px)' }}
@@ -122,7 +123,8 @@ const GameNotifications: React.FC = () => {
               Click anywhere to continue
             </p>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* XP Float */}
