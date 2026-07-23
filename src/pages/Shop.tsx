@@ -451,6 +451,35 @@ const Shop: React.FC = () => {
                   <p className="text-xs text-text-secondary">Payment rail</p>
                   <p className={`mt-1 font-black ${isCorrectNetwork ? 'text-success-emerald' : 'text-gold'}`}>{isCorrectNetwork ? 'Ritual ready' : 'Switch required'}</p>
                 </div>
+                {!isCorrectNetwork && (
+                  <div className="mt-3 rounded-xl border border-interactive-cyan/25 bg-secondary-layer p-4 text-sm text-text-secondary sm:col-span-2">
+                    <p className="mb-2 font-semibold text-text-primary">
+                      Manual setup (if automatic switch doesn't work)
+                    </p>
+                    <p className="mb-2">
+                      Open your wallet app and manually add or select this network:
+                    </p>
+                    <ul className="mb-3 space-y-1 font-mono text-xs">
+                      <li>Network Name: Ritual</li>
+                      <li>RPC URL: https://rpc.ritualfoundation.org</li>
+                      <li>Chain ID: 1979</li>
+                      <li>Currency Symbol: RITUAL</li>
+                    </ul>
+                    <button
+                      onClick={async () => {
+                        const ok = await checkLiveNetwork();
+                        if (ok) {
+                          showToast('success', 'Ritual network detected!');
+                        } else {
+                          showToast('error', 'Still not on Ritual network. Please switch inside your wallet app.');
+                        }
+                      }}
+                      className="rounded-lg border border-interactive-cyan/40 px-4 py-2 text-xs font-bold text-interactive-cyan"
+                    >
+                      I've switched manually — Check Now
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </section>
