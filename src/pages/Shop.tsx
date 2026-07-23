@@ -172,7 +172,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 };
 
 const Shop: React.FC = () => {
-  const { walletAddress, isConnected, isCorrectNetwork, connectWallet, switchToRitual, checkLiveNetwork, purchaseItem, getRitualBalance } = useWallet();
+  const { walletAddress, isConnected, isCorrectNetwork, isSwitchingNetwork, connectWallet, switchToRitual, checkLiveNetwork, purchaseItem, getRitualBalance } = useWallet();
   const { xpBoosterActive, xpBoosterExpiry, premiumStatus, setXPBooster, setPremium } = useGame();
   const { showToast } = useToast();
 
@@ -501,7 +501,13 @@ const Shop: React.FC = () => {
                   {item.error && (
                     <div className="mt-4 rounded-2xl border border-gold/25 bg-gold/10 p-4">
                       <p className="text-sm font-bold text-gold">{item.error}</p>
-                      <button onClick={() => handleSwitchAndRetry(item.type)} className="mt-3 rounded-xl border border-interactive-cyan/40 px-4 py-2 text-sm font-bold text-interactive-cyan">Switch Network</button>
+                      <button
+                        onClick={() => handleSwitchAndRetry(item.type)}
+                        disabled={isSwitchingNetwork}
+                        className="mt-3 rounded-xl border border-interactive-cyan/40 px-4 py-2 text-sm font-bold text-interactive-cyan disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isSwitchingNetwork ? 'Switching…' : 'Switch Network'}
+                      </button>
                       <p className="mt-2 text-xs text-text-secondary">
                         If nothing happens after tapping Switch Network, open MetaMask,
                         manually select the Ritual network from your network list, then

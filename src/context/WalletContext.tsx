@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from 'react';
 import { useToast } from './ToastContext';
 import { useGame } from './GameContext';
 import { useAvatar } from './AvatarContext';
@@ -45,6 +45,7 @@ const FEE_RECIPIENT = import.meta.env.VITE_FEE_RECIPIENT || '0xd06bC18129a8be9af
 interface WalletContextType {
   isConnected: boolean;
   isConnecting: boolean;
+  isSwitchingNetwork: boolean;
   walletAddress: string;
   isCorrectNetwork: boolean;
   connectWallet: () => Promise<boolean>;
@@ -63,8 +64,10 @@ const WalletContext = createContext<WalletContextType | undefined>(undefined);
 export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [isSwitchingNetwork, setIsSwitchingNetwork] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(false);
+  const isSwitchingRef = useRef(false);
   const { showToast } = useToast();
   const { hydrateAvatarForWallet } = useAvatar();
   const {
@@ -166,60 +169,69 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   }, [resetGame]);
 
   const switchToRitual = async () => {
-    if (!window.ethereum) {
-      showToast('error', 'Please install MetaMask to continue');
-      return;
-    }
+    if (isSwitchingRef.current) return;
+    isSwitchingRef.current = true;
+    setIsSwitchingNetwork(true);
 
     try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: RITUAL_CHAIN_ID }],
-      });
-    } catch (err: unknown) {
-      const code = (err as WalletError)?.code;
-      if (code === 4902) {
-        try {
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [RITUAL_NETWORK],
-          });
-        } catch {
-          showToast(
-            'error',
-            'Failed to add Ritual network. Please add it manually in your wallet settings.'
-          );
-        }
+      if (!window.ethereum) {
+        showToast('error', 'Please install MetaMask to continue');
+        return;
       }
-      // For other error codes, do not show an error immediately —
-      // some mobile wallets report an error even when the switch
-      // actually completes a moment later. Fall through to polling.
-    }
 
-    // Poll for up to 10 seconds (checking every second), since mobile
-    // wallet browsers often need a few seconds for the user to notice
-    // and tap the confirmation prompt.
-    for (let i = 0; i < 10; i++) {
-      await new Promise((r) => setTimeout(r, 1000));
       try {
-        const chainId = (await window.ethereum.request({
-          method: 'eth_chainId',
-        })) as string;
-        if (chainId === RITUAL_CHAIN_ID) {
-          setIsCorrectNetwork(true);
-          showToast('success', 'Switched to Ritual Network');
-          return;
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: RITUAL_CHAIN_ID }],
+        });
+      } catch (err: unknown) {
+        const code = (err as WalletError)?.code;
+        if (code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [RITUAL_NETWORK],
+            });
+          } catch {
+            showToast(
+              'error',
+              'Failed to add Ritual network. Please add it manually in your wallet settings.'
+            );
+          }
         }
-      } catch {
-        // ignore transient errors while polling
+        // For other error codes, do not show an error immediately —
+        // some mobile wallets report an error even when the switch
+        // actually completes a moment later. Fall through to polling.
       }
-    }
 
-    setIsCorrectNetwork(false);
-    showToast(
-      'error',
-      'Network switch did not complete. Please open your wallet app, manually select the Ritual network, then return to this page.'
-    );
+      // Poll for up to 10 seconds (checking every second), since mobile
+      // wallet browsers often need a few seconds for the user to notice
+      // and tap the confirmation prompt.
+      for (let i = 0; i < 10; i++) {
+        await new Promise((r) => setTimeout(r, 1000));
+        try {
+          const chainId = (await window.ethereum.request({
+            method: 'eth_chainId',
+          })) as string;
+          if (chainId === RITUAL_CHAIN_ID) {
+            setIsCorrectNetwork(true);
+            showToast('success', 'Switched to Ritual Network');
+            return;
+          }
+        } catch {
+          // ignore transient errors while polling
+        }
+      }
+
+      setIsCorrectNetwork(false);
+      showToast(
+        'error',
+        'Network switch did not complete. Please open your wallet app, manually select the Ritual network, then return to this page.'
+      );
+    } finally {
+      isSwitchingRef.current = false;
+      setIsSwitchingNetwork(false);
+    }
   };
 
   const checkLiveNetwork = useCallback(async (): Promise<boolean> => {
@@ -363,6 +375,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       value={{
         isConnected,
         isConnecting,
+        isSwitchingNetwork,
         walletAddress,
         isCorrectNetwork,
         connectWallet,
