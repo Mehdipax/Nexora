@@ -99,13 +99,14 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
       xpEarned = boosterActive ? Math.ceil(base * 1.5) : base;
     }
 
-    // 5. Streak: only advance once per calendar day
+    // 5. Streak: advance once per calendar day on ANY challenge
+    // attempt (correct or wrong), per the original product spec.
     const today = new Date().toISOString().split('T')[0];
     let newStreak = user.streak ?? 0;
     let streakBonus = 0;
     let newLastActiveDate = user.last_active_date;
 
-    if (isCorrect && user.last_active_date !== today) {
+    if (user.last_active_date !== today) {
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
       const yStr = yesterday.toISOString().split('T')[0];
