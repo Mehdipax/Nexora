@@ -1,15 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-import {
-  calcLevel,
-  calcLevelProgress,
-  calcXPToNext,
-  calcRankScore,
-  calcRank,
-  XP_TABLE,
-  STREAK_BONUS,
-  CategoryType,
-  DifficultyType,
-} from '../src/lib/gameCalculations';
+import type { CategoryType, DifficultyType } from '../src/lib/gameCalculations';
 
 interface ApiRequest {
   method?: string;
@@ -32,25 +21,36 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     return;
   }
 
-  const { questionId, walletAddress, selectedAnswer, category, difficulty } =
-    req.body || {};
-
-  if (!questionId || !walletAddress || !category || !difficulty) {
-    res.status(400).json({ error: 'Missing required parameters' });
-    return;
-  }
-
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!supabaseUrl || !serviceKey) {
-    res.status(500).json({ error: 'Server missing Supabase service credentials' });
-    return;
-  }
-
-  const supabase = createClient(supabaseUrl, serviceKey);
-  const addr = walletAddress.toLowerCase();
-
   try {
+    const { createClient } = await import('@supabase/supabase-js');
+    const {
+      calcLevel,
+      calcLevelProgress,
+      calcXPToNext,
+      calcRankScore,
+      calcRank,
+      XP_TABLE,
+      STREAK_BONUS,
+    } = await import('../src/lib/gameCalculations');
+
+    const { questionId, walletAddress, selectedAnswer, category, difficulty } =
+      req.body || {};
+
+    if (!questionId || !walletAddress || !category || !difficulty) {
+      res.status(400).json({ error: 'Missing required parameters' });
+      return;
+    }
+
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!supabaseUrl || !serviceKey) {
+      res.status(500).json({ error: 'Server missing Supabase service credentials' });
+      return;
+    }
+
+    const supabase = createClient(supabaseUrl, serviceKey);
+    const addr = walletAddress.toLowerCase();
+
     // 1. Look up the pending question and ensure it hasn't been used
     const { data: pending, error: pendingError } = await supabase
       .from('pending_questions')
