@@ -105,58 +105,88 @@ Return EXACTLY this JSON (nothing else):
     return;
   }
 
-  const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
-  const cleaned = rawText
-    .trim()
-    .replace(/^```(?:json)?\s*/i, '')
-    .replace(/\s*```$/, '')
-    .trim();
+  try {
+    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+    const cleaned = rawText
+      .trim()
+      .replace(/^```(?:json)?\s*/i, '')
+      .replace(/\s*```$/, '')
+      .trim();
 
-  const parsed = JSON.parse(cleaned);
+    let parsed: any;
+    try {
+      parsed = JSON.parse(cleaned);
+    } catch {
+      res.status(502).json({
+        error: 'AI returned malformed data. Please try again.',
+      });
+      return;
+    }
 
-  if (!parsed.question || !parsed.options || !parsed.correct || !parsed.explanation) {
-    throw new Error('AI response missing required fields');
+    if (!parsed.question || !parsed.options || !parsed.correct || !parsed.explanation) {
+      res.status(502).json({
+        error: 'AI response was incomplete. Please try again.',
+      });
+      return;
+    }
+    if (!['A', 'B', 'C', 'D'].includes(parsed.correct)) {
+      res.status(502).json({
+        error: 'AI returned an invalid answer format. Please try again.',
+      });
+      return;
+    }
+    if (
+      !parsed.options.A || !parsed.options.B ||
+      !parsed.options.C || !parsed.options.D
+    ) {
+      res.status(502).json({
+        error: 'AI response was missing answer options. Please try again.',
+      });
+      return;
+    }
+
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !serviceKey) {
+      res.status(500).json({ error: 'Server missing Supabase service credentials' });
+      return;
+    }
+
+    if (!walletAddress) {
+      res.status(400).json({ error: 'Missing walletAddress' });
+      return;
+    }
+
+    const supabaseAdmin = createClient(supabaseUrl, serviceKey);
+
+    const { data: inserted, error: insertError } = await supabaseAdmin
+      .from('pending_questions')
+      .insert({
+        wallet_address: String(walletAddress).toLowerCase(),
+        category,
+        difficulty,
+        correct_answer: parsed.correct,
+        explanation: parsed.explanation,
+      })
+      .select('id')
+      .single();
+
+    if (insertError || !inserted) {
+      console.error('[generate-question] insert failed:', insertError);
+      res.status(500).json({ error: 'Failed to store question. Please try again.' });
+      return;
+    }
+
+    res.status(200).json({
+      questionId: inserted.id,
+      question: parsed.question,
+      options: parsed.options,
+    });
+  } catch (err: any) {
+    console.error('[generate-question] unexpected error:', err);
+    res.status(500).json({
+      error: err?.message || 'Unexpected server error. Please try again.',
+    });
   }
-  if (!['A', 'B', 'C', 'D'].includes(parsed.correct)) {
-    throw new Error('AI returned invalid correct answer key');
-  }
-
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseUrl || !serviceKey) {
-    res.status(500).json({ error: 'Server missing Supabase service credentials' });
-    return;
-  }
-
-  const supabaseAdmin = createClient(supabaseUrl, serviceKey);
-
-  if (!walletAddress) {
-    res.status(400).json({ error: 'Missing walletAddress' });
-    return;
-  }
-
-  const { data: inserted, error: insertError } = await supabaseAdmin
-    .from('pending_questions')
-    .insert({
-      wallet_address: String(walletAddress).toLowerCase(),
-      category,
-      difficulty,
-      correct_answer: parsed.correct,
-      explanation: parsed.explanation,
-    })
-    .select('id')
-    .single();
-
-  if (insertError || !inserted) {
-    res.status(500).json({ error: 'Failed to store question' });
-    return;
-  }
-
-  res.status(200).json({
-    questionId: inserted.id,
-    question: parsed.question,
-    options: parsed.options,
-  });
-  return;
 }
