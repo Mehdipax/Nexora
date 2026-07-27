@@ -1,4 +1,44 @@
-import type { CategoryType, DifficultyType } from '../src/lib/gameCalculations';
+type CategoryType = 'general' | 'football' | 'ai';
+type DifficultyType = 'easy' | 'medium' | 'hard';
+type RankType = 'Beginner' | 'Bronze' | 'Silver' | 'Gold';
+
+const XP_TABLE: Record<CategoryType, Record<DifficultyType, number>> = {
+  general: { easy: 10, medium: 20, hard: 40 },
+  football: { easy: 10, medium: 20, hard: 40 },
+  ai: { easy: 15, medium: 30, hard: 60 },
+};
+
+const STREAK_BONUS: Record<number, number> = {
+  1: 10,
+  2: 20,
+  3: 30,
+  4: 40,
+  5: 50,
+};
+
+function calcLevel(xp: number): number {
+  return Math.floor(xp / 100);
+}
+
+function calcLevelProgress(xp: number): number {
+  return xp % 100;
+}
+
+function calcXPToNext(xp: number): number {
+  return (Math.floor(xp / 100) + 1) * 100 - xp;
+}
+
+function calcRankScore(xp: number, correct: number, total: number): number {
+  const acc = total > 0 ? correct / total : 0;
+  return Math.round(xp * 0.5 + correct * 10 + acc * 100 + total * 2);
+}
+
+function calcRank(score: number): RankType {
+  if (score >= 1000) return 'Gold';
+  if (score >= 500) return 'Silver';
+  if (score >= 200) return 'Bronze';
+  return 'Beginner';
+}
 
 interface ApiRequest {
   method?: string;
@@ -23,15 +63,6 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
 
   try {
     const { createClient } = await import('@supabase/supabase-js');
-    const {
-      calcLevel,
-      calcLevelProgress,
-      calcXPToNext,
-      calcRankScore,
-      calcRank,
-      XP_TABLE,
-      STREAK_BONUS,
-    } = await import('../src/lib/gameCalculations');
 
     const { questionId, walletAddress, selectedAnswer, category, difficulty } =
       req.body || {};
