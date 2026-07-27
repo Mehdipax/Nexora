@@ -311,9 +311,29 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       return tx.hash;
     } catch (err: unknown) {
       console.error('[Purchase] Full error object:', err);
-      const purchaseError = err as { reason?: string; shortMessage?: string; message?: string };
-      const reason =
-        purchaseError?.reason || purchaseError?.shortMessage || purchaseError?.message || 'Unknown error';
+      const purchaseError = err as {
+        code?: string | number;
+        reason?: string;
+        shortMessage?: string;
+        message?: string;
+        info?: { error?: { message?: string } };
+      };
+
+      let reason =
+        purchaseError?.info?.error?.message ||
+        purchaseError?.reason ||
+        purchaseError?.shortMessage ||
+        purchaseError?.message ||
+        'Unknown error';
+
+      if (purchaseError?.code === 'INSUFFICIENT_FUNDS' || /insufficient funds/i.test(reason)) {
+        reason = 'Insufficient RITUAL balance to cover this purchase plus network gas fees.';
+      } else if (purchaseError?.code === 'ACTION_REJECTED' || purchaseError?.code === 4001) {
+        reason = 'Transaction was rejected in your wallet.';
+      } else if (/timeout/i.test(reason)) {
+        reason = 'The Ritual network did not respond in time. Please try again.';
+      }
+
       throw new Error(`PURCHASE_FAILED: ${reason}`);
     }
   }, []);
